@@ -34,6 +34,7 @@ export async function GET() {
         const track = {
             trackId: data.item.id,
             track: data.item.name,
+            popular: data.item.popularity,
             artist: data.item.artists.map((artist: any) => artist.name).join(", "),
             albumArt: data.item.album.images[0].url,
             isPlaying: data.is_playing,

@@ -5,12 +5,14 @@ import { useState } from "react";
 import Image from "next/image";
 import AuthButton from "@/app/components/authButton";
 import TopArtists from "@/app/components/topArtists";
+import Popularity from "@/app/components/popular";
 
 
 
 interface TrackData {
     trackId?: string;
     track?: string;
+    popularity?: string;
     artist?: string;
     albumArt?: string;
     isPlaying?: boolean;
@@ -35,6 +37,7 @@ export default function NowPlaying() {
                     setTrackData({
                         trackId: data.trackId,
                         track: data.track,
+                        popularity: data.popular,
                         artist: data.artist,
                         albumArt: data.albumArt,
                         isPlaying: data.isPlaying,
@@ -48,11 +51,11 @@ export default function NowPlaying() {
             }
             // const data: TrackData = await response.json();
 
-            // Only update if track id changes
-            if (data.trackId !== previousTrackId.current) {
-                previousTrackId.current = data.trackId;
-                setTrackData(data)
-            }
+            // // Only update if track id changes
+            // if (data.trackId !== previousTrackId.current) {
+            //     previousTrackId.current = data.trackId;
+            //     setTrackData(data)
+            // }
         };
 
         fetchNowPlaying(); // Init
@@ -126,6 +129,7 @@ export default function NowPlaying() {
                                 className="rounded-3xl shadow-xl opacity-90"
                             />
                         )}
+                        <Popularity popularity={trackData.popularity} />
                     </div>
 
                 ) : (

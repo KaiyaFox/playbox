@@ -1,9 +1,27 @@
-export default function Popularity() {
-    const popularity = 80; // Example popularity value (0 - 100)
+'use client';
+import {useEffect} from "react";
+
+
+interface PopularityProps {
+    popularity?: string | undefined
+
+}
+
+export default function Popularity({popularity}: PopularityProps) {
+
+    // Get the popularity and trend data from the API
+    useEffect(() => {
+        fetch("/api/now-playing")
+            .then((response) => response.json())
+            .then((data) => {
+                console.log(data);
+            });
+    }, []);
+
     const trend = 'Up';    // Trend indicator (e.g., 'Up', 'Down')
 
     // Calculate how many hearts to fill based on the popularity
-    const filledHearts = Math.floor(popularity / 25); // 0 - 4 hearts
+    const filledHearts = Math.floor((Number(popularity) || 0) / 25); // 0 - 4 heartspopularity / 25); // 0 - 4 hearts
     const totalHearts = 4; // Max hearts
 
     // Create a simple array to represent the hearts, filled or not

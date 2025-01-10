@@ -15,12 +15,7 @@ export default function Home() {
 
                     <NowPlaying/>
                     <div className="flex justify-center">
-                        <Popularity/>
-
                     </div>
-
-                    <TopArtists/>
-
                 </div>
 
             </main>
