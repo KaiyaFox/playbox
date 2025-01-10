@@ -86,7 +86,7 @@ export default function NowPlaying() {
                         mouseControls: true,
                         touchControls: true,
                         minHeight: 200.0,
-                        minWidth: 200.0,
+                        minWidth: 500.0,
                         scale: 1.0,
                         color: 0x8b53ff,
                         backgroundColor: 0x181818,
@@ -104,10 +104,10 @@ export default function NowPlaying() {
         <>
         <div className="relative flex h-screen">
             {/* Vanta Background */}
-            <div id="vanta-background" className="absolute inset-0 -z-0" />
+            <div id="vanta-background" className="absolute inset-0 -z-0 opacity-100" />
 
             {/* Right Panel */}
-            <div className=" relative z-10 flex flex-col flex-grow items-center justify-center">
+            <div className=" relative z-1 flex flex-col flex-grow items-center justify-center">
 
                 {trackData ? (
 
@@ -126,10 +126,13 @@ export default function NowPlaying() {
                                 alt="Album Art"
                                 width={600}
                                 height={600}
-                                className="rounded-3xl shadow-xl opacity-90"
+                                className="rounded-3xl shadow-xl opacity-90 mb-2"
                             />
                         )}
-                        <Popularity popularity={trackData.popularity} />
+                        <div className="mr-1">
+                            <Popularity popularity={trackData.popularity} />
+                        </div>
+
                     </div>
 
                 ) : (
