@@ -11,11 +11,15 @@ export default function AuthButton() {
 
     return session ? (
         <>
-            <button className="btn btn-primary" onClick={() => signOut()}>Sign
-                Out {session.user?.name}</button>
-            <Image src={avatar} alt={"User profile image"} width={50} height={50}/></>
-    ) : (
-        <button className="btn btn-primary" onClick={() => signIn("spotify")}>Sign In with Spotify</button>
+
+            <button className="btn btn-primary btn-sm mr-3" onClick={() => signOut()}>Sign
+                Out
+            </button>
+
+            <Image className="ring-primary ring-offset-base-100 w-10 rounded-full ring ring-offset-2" src={avatar} alt={"User profile image"} width={30} height={30}/>
+            </>
+            ) : (
+        <button className="btn btn-primary btn-sm" onClick={() => signIn("spotify")}>Sign In</button>
 
     );
 }

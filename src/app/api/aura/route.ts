@@ -20,13 +20,13 @@ export async function GET() {
         console.log(accessToken)
 
         // Fetch
-        const response = await fetch("https://api.spotify.com/v1/me/player/currently-playing", {
-                headers: {
-                    Authorization: `Bearer ${accessToken}`,
-                },
+        const response = await fetch(`https://api.spotify.com/v1/audio-features/0yJiK3DZ4ypc3HL2AGxvPR`, {
+            headers: {
+                Authorization: `Bearer ${accessToken}`,
+            },
         });
 
-        console.log(response)
+        console.log("From spotify", response)
 
         if (response.status === 204 || response.status > 400) {
             return NextResponse.json({playing: false});

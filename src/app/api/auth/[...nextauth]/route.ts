@@ -1,5 +1,5 @@
 import NextAuth from "next-auth";
-import { NextApiHandler} from "next";
+import { NextApiHandler } from "next";
 import SpotifyProvider from "next-auth/providers/spotify";
 
 export const authOptions = {
@@ -28,11 +28,12 @@ export const authOptions = {
             session.accessToken = token.accessToken;
             session.refreshToken = token.refreshToken;
             session.expiresAt = token.expiresAt;
+            session.user.accessToken = token.accessToken;
             return session;
         },
     },
 };
 
-const handler: NextApiHandler = (req, res) => NextAuth(req, res, authOptions);
+const handler = NextAuth(authOptions);
 
 export { handler as GET, handler as POST };

@@ -1,11 +1,12 @@
 "use client";
 
-import {useEffect, useRef} from "react";
+import {useEffect} from "react";
 import { useState } from "react";
 import Image from "next/image";
 import AuthButton from "@/app/components/authButton";
-import TopArtists from "@/app/components/topArtists";
 import Popularity from "@/app/components/popular";
+import MostPlayedSongs from "@/app/components/mostPlayedSongs";
+import {session} from "next-auth/core/routes";
 
 
 
@@ -22,7 +23,6 @@ interface TrackData {
 
 export default function NowPlaying() {
     const [trackData,setTrackData] = useState<TrackData | null>(null);
-    const previousTrackId = useRef<string | null>(null);
 
 
     useEffect(() => {
@@ -102,46 +102,71 @@ export default function NowPlaying() {
 
     return (
         <>
-        <div className="relative flex h-screen">
-            {/* Vanta Background */}
-            <div id="vanta-background" className="absolute inset-0 -z-0 opacity-100" />
+            <div className="relative flex items-center justify-center min-h-[calc(100vh-4rem)] px-4 pt-20 sm:pt-24">
+                {/* Vanta Background */}
+                <div id="vanta-background" className="fixed inset-0 z-0 w-full h-full opacity-100" />
 
-            {/* Right Panel */}
-            <div className=" relative z-1 flex flex-col flex-grow items-center justify-center">
+                {/* Main Content */}
+                <div className="relative z-10 flex flex-col items-center justify-center w-full">
+                    {trackData ? (
+                        <div className="flex flex-col lg:flex-row w-full gap-4">
+                            {/* Left Most Played */}
+                            <div className="flex-grow grid place-items-center p-4">
+                                <MostPlayedSongs />
+                            </div>
 
-                {trackData ? (
+                            {/* Center Track Data */}
+                            <div className="flex-grow grid place-items-center p-4">
+                                <div className="text-center">
+                                    <h1 className="text-4xl sm:text-5xl font-bold text-purple-400 mb-3">
+                                        Now Bumpin'
+                                    </h1>
 
-                    <div className="text-center">
-                        <h1 className="text-5xl font-bold text-purple-400 mb-1">Now Bumpin'</h1>
+                                    <div className="p-5 rounded-xl mb-4">
+                                        <p className="text-2xl sm:text-3xl text-white font-semibold">
+                                            {trackData.track}
+                                        </p>
+                                        <p className="text-lg text-gray-400">{trackData.artist}</p>
+                                        <p>Genre: {trackData.genre}</p>
+                                        <p className="mt-2 text-2xl">{trackData.isPlaying ? "🔊" : "🔇"}</p>
+                                    </div>
 
-                        <div className="bg-gray-800 bg-opacity-0 p-5 rounded-xl shadow-lg mb-1">
-                            <p className="text-3xl text-white font-semibold">{trackData.track}</p>
-                            <p className="text-lg text-gray-400">{trackData.artist}</p>
-                            <p className="mt-2 text-2xl">{trackData.isPlaying ? "🔊" : "🔇"}</p>
+                                    {trackData.albumArt && (
+                                        <Image
+                                            src={trackData.albumArt}
+                                            alt="Album Art"
+                                            width={600}
+                                            height={600}
+                                            className="rounded-3xl shadow-xl opacity-90 mb-4"
+                                        />
+                                    )}
+                                </div>
+                            </div>
+
+                            {/* Right Most Played */}
+                            <div className="flex-grow grid place-items-center p-4">
+                                <Popularity popularity={trackData.popularity} />
+                            </div>
                         </div>
-
-                        {trackData.albumArt && (
-                            <Image
-                                src={trackData.albumArt}
-                                alt="Album Art"
-                                width={600}
-                                height={600}
-                                className="rounded-3xl shadow-xl opacity-90 mb-2"
-                            />
-                        )}
-                        <div className="mr-1">
-                            <Popularity popularity={trackData.popularity} />
+                    ) : (
+                        <div className="text-center">
+                            <h1 className="text-4xl sm:text-5xl font-bold bg-gradient-to-r from-purple-400 via-pink-500 to-red-500 bg-clip-text text-transparent">
+                                Welcome to PlayBox!
+                            </h1>
+                            <p className="text-lg sm:text-2xl text-gray-300 mt-2">
+                                Connect your Spotify account to get started.
+                            </p>
+                            <div className="mt-4">
+                                <AuthButton />
+                            </div>
                         </div>
-
-                    </div>
-
-                ) : (
-                    <AuthButton/>
-                )}
+                    )}
+                </div>
             </div>
-        </div>
         </>
-
     );
+
+
+
 }
 
