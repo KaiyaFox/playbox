@@ -33,7 +33,7 @@ export default function Popularity({popularity}: PopularityProps) {
         <div className="stats shadow">
             <div className="stat">
                 <div className="stat-title">Track Popularity</div>
-                <div className="stat-value">{popularity}</div>
+                <div className="stat-value">{popularity}<sub className="text-sm">/100</sub></div>
 
                 <div className="rating gap-3">
                     {/* Loop through hearts array and display accordingly */}
