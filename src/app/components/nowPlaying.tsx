@@ -5,13 +5,17 @@ import { useState } from "react";
 import Image from "next/image";
 import AuthButton from "@/app/components/authButton";
 import Popularity from "@/app/components/popular";
-import MostPlayedSongs from "@/app/components/mostPlayedSongs";
 import RecentlyPlayed from "@/app/components/recentlyPlayed";
 
 
 interface RecentlyPlayedItem {
     track: {
         name: string;
+        album: {
+            images: {
+                url: string;
+            }[];
+        };
     };
     played_at: string;
     context: string | null;
@@ -31,8 +35,11 @@ interface TrackData {
 
 
 
+
+
 export default function NowPlaying() {
     const [trackData,setTrackData] = useState<TrackData | null>(null);
+
 
 
     useEffect(() => {
@@ -83,7 +90,9 @@ export default function NowPlaying() {
             };
 
             vantaScript.onload = () => {
+                // @ts-expect-error - VANTA is a global variable
                 if (window.VANTA) {
+                    // @ts-expect-error - VANTA is a global variable
                     window.VANTA.DOTS({
                         el: "#vanta-background",
                         mouseControls: true,
@@ -115,14 +124,14 @@ export default function NowPlaying() {
                         <div className="flex flex-col lg:flex-row w-full gap-4">
                             {/* Left Most Played */}
                             <div className="flex-grow grid place-items-center p-4">
-                                <RecentlyPlayed recentlyPlayed={trackData.recentlyPlayed} />
+                                <RecentlyPlayed recentlyPlayed={trackData.recentlyPlayed || []} />
                             </div>
 
                             {/* Center Track Data */}
                             <div className="flex-grow grid place-items-center p-4">
                                 <div className="text-center">
                                     <h1 className="text-4xl sm:text-5xl font-bold text-purple-400 mb-3">
-                                        Now Bumpin'
+                                        Now Bumpin
                                     </h1>
 
                                     <div className="p-5 rounded-xl mb-4">

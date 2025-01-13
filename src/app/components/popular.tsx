@@ -18,7 +18,6 @@ export default function Popularity({popularity}: PopularityProps) {
             });
     }, []);
 
-    const trend = 'Up';    // Trend indicator (e.g., 'Up', 'Down')
 
     // Calculate how many hearts to fill based on the popularity
     const filledHearts = Math.floor((Number(popularity) || 0) / 25); // 0 - 4 heartspopularity / 25); // 0 - 4 hearts

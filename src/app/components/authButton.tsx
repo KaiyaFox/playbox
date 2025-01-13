@@ -4,9 +4,12 @@
 import { signIn, signOut, useSession } from "next-auth/react";
 import Image from "next/image";
 
+
 export default function AuthButton() {
+
     const { data: session } = useSession();
-    const avatar = session?.user?.image;
+    const avatar = session?.user?.image ?? "/default-avatar.png";
+
     console.log(avatar)
 
     return session ? (

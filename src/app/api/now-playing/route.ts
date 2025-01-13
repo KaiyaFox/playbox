@@ -1,6 +1,6 @@
 import { NextResponse} from "next/server";
 import { getServerSession} from "next-auth";
-import { authOptions } from "@/app/api/auth/[...nextauth]/route";
+import { authOptions } from "@/lib/authOptions";
 
 interface Artist {
     name: string
@@ -21,7 +21,7 @@ export async function GET() {
             "https://api.spotify.com/v1/me/player/recently-played?limit=5",
         ];
 
-        const accessToken = session.accessToken;
+        const accessToken = session.accessToken
         console.log(accessToken)
 
         // Make multiple requests concurrently
