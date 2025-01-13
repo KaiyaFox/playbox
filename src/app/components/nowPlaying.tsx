@@ -7,6 +7,7 @@ import AuthButton from "@/app/components/authButton";
 import Popularity from "@/app/components/popular";
 import RecentlyPlayed from "@/app/components/recentlyPlayed";
 import Artist from "@/app/components/Artist";
+import TopArtist from "@/app/components/TopArtist";
 
 interface RecentlyPlayedItem {
     track: {
@@ -126,14 +127,16 @@ export default function NowPlaying() {
                         <div className="flex flex-col lg:flex-row w-full gap-4">
                             {/* Left Most Played */}
                             <div className="flex-grow grid place-items-center p-4">
-                                <RecentlyPlayed recentlyPlayed={trackData.recentlyPlayed || []} />
+                                <TopArtist />
                             </div>
 
                             {/* Center Track Data */}
-                            <div className="flex-grow grid place-items-center p-4">
+                            <div className="flex-grow grid place-items-center">
                                 <div className="text-center">
                                     <h1 className="text-4xl sm:text-5xl font-bold text-purple-400 mb-3">
                                         Now Bumpin
+                                        <p className="mt-2 text-2xl">{trackData.isPlaying ? "🔊" : "Paused/Nothing Playing"}</p>
+
                                     </h1>
 
                                     <div className="p-5 rounded-xl mb-4">
@@ -142,8 +145,8 @@ export default function NowPlaying() {
                                         </p>
                                         <p className="text-lg text-gray-400">{trackData.artist}</p>
                                         <p>{trackData.genre}</p>
-                                        <p className="mt-2 text-2xl">{trackData.isPlaying ? "🔊" : "Paused/Nothing Playing"}</p>
-                                        <Artist artistId={trackData.artistId || ''} />
+                                        <Popularity popularity={trackData.popularity} />
+
 
                                     </div>
 
@@ -157,11 +160,15 @@ export default function NowPlaying() {
                                         />
                                     )}
                                 </div>
+                                <div className="items-center justify-center text-center text-2xl">
+                                <Artist artistId={trackData.artistId || ''} />
+                                </div>
+
                             </div>
 
                             {/* Right Most Played */}
                             <div className="flex-grow grid place-items-center p-4">
-                                <Popularity popularity={trackData.popularity} />
+                                <RecentlyPlayed recentlyPlayed={trackData.recentlyPlayed || []} />
 
                             </div>
                         </div>

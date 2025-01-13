@@ -1,4 +1,4 @@
-"use client"
+"use client";
 
 import { useState, useEffect } from "react";
 
@@ -6,7 +6,7 @@ import { useState, useEffect } from "react";
 interface ArtistData {
     artistId: string;
     artist: string;
-    genre: string;
+    genre: string[]; // Update to reflect that genre is an array
     popularity: string;
 }
 
@@ -29,9 +29,10 @@ export default function Artist({ artistId }: ArtistProps) {
                     setArtistData({
                         artistId: data.artistId,
                         artist: data.artist,
-                        genre: data.genre,
+                        genre: data.genre, // Assuming the API returns an array
                         popularity: data.popularity,
                     });
+                    console.log("Current Artist data:", data);
                 } else {
                     console.error("Failed to fetch artist data");
                 }
@@ -48,16 +49,18 @@ export default function Artist({ artistId }: ArtistProps) {
     return (
         <div className="stats shadow">
             <div className="stat">
-                <div className="stat-title">Style</div>
+                <div className="stat-title">Style Tags</div>
                 <div className="stat-value">
-                    {artistData?.genre ? String(artistData.genre).toUpperCase() : "No genre available"}
+                    {artistData?.genre && artistData.genre.length > 0
+                        ? artistData.genre.map((g, idx) => (
+                            <div key={idx} className="badge badge-primary mr-1">
+                                {g}
+                            </div>
+                        ))
+                        : "No genre available"}
                 </div>
 
-
-                <div className="rating gap-3">
-
-                </div>
-
+                <div className="rating gap-3"></div>
                 <div className="stat-desc"></div>
             </div>
         </div>
