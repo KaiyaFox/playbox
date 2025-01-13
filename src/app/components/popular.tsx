@@ -48,7 +48,7 @@ export default function Popularity({popularity}: PopularityProps) {
                     ))}
                 </div>
 
-                <div className="stat-desc">{trend} more than last week</div>
+                <div className="stat-desc"></div>
             </div>
         </div>
     );
