@@ -30,6 +30,10 @@ export default function Popularity({popularity}: PopularityProps) {
     }
 
     return (
+
+        <div className="tooltip tooltip-bottom"
+             data-tip="This score reflects how often this song is streamed and engaged with compared to the artist's other tracks.
+             Higher scores indicate that the song is one of the artist's more popular releases.">
         <div className="stats shadow">
             <div className="stat">
                 <div className="stat-title">Track Popularity</div>
@@ -49,6 +53,7 @@ export default function Popularity({popularity}: PopularityProps) {
 
                 <div className="stat-desc"></div>
             </div>
+        </div>
         </div>
     );
 }
