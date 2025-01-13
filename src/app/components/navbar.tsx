@@ -1,7 +1,18 @@
+"use client"
 import React from 'react';
 import AuthButton from "@/app/components/authButton";
+//import { useRouter } from 'next/navigation';
 
+
+// const HandleClick = (path: string) => {
+//     const router = useRouter();
+//
+//     console.log("clicked");
+//     // Use next to navigate to the path
+//     router.push(path);
+// }
 export default function Navbar() {
+
     return (
         <div className="navbar bg-base-100 bg-opacity-90 fixed top-0 left-0 w-full z-50">
             <div className="navbar-start">
@@ -23,8 +34,8 @@ export default function Navbar() {
                     <ul
                         tabIndex={0}
                         className="menu menu-sm dropdown-content bg-base-100 rounded-box z-[60] mt-3 w-52 p-2 shadow">
-                        <li><a>Now Playing</a></li>
-                        <li><a>About</a></li>
+                        <button className="btn btn-ghost">Now Playing</button>
+                        <button className="btn btn-ghost">About</button>
                     </ul>
                 </div>
             </div>

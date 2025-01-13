@@ -3,6 +3,7 @@ import { getServerSession} from "next-auth";
 import { authOptions } from "@/lib/authOptions";
 
 interface Artist {
+    id: string;
     name: string
 }
 
@@ -52,10 +53,12 @@ export async function GET() {
             track: currentlyPlayingData.item.name,
             popular: currentlyPlayingData.item.popularity,
             artist: currentlyPlayingData.item.artists.map((artist: Artist) => artist.name).join(", "),
+            artistId: currentlyPlayingData.item.artists.map((artist: Artist) => artist.id).join(", "),
             albumArt: currentlyPlayingData.item.album.images[0].url,
             genre: currentlyPlayingData.item.genre,
             isPlaying: currentlyPlayingData.is_playing,
             recentlyPlayed: topArtistsData.items,
+
         };
         return NextResponse.json(track);
     } catch (error) {

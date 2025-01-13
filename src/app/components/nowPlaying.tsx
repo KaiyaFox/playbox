@@ -6,7 +6,7 @@ import Image from "next/image";
 import AuthButton from "@/app/components/authButton";
 import Popularity from "@/app/components/popular";
 import RecentlyPlayed from "@/app/components/recentlyPlayed";
-
+import Artist from "@/app/components/Artist";
 
 interface RecentlyPlayedItem {
     track: {
@@ -28,6 +28,7 @@ interface TrackData {
     genre?: string;
     popularity?: string;
     artist?: string;
+    artistId?: string;
     albumArt?: string;
     isPlaying?: boolean;
     recentlyPlayed?: RecentlyPlayedItem[];
@@ -56,6 +57,7 @@ export default function NowPlaying() {
                         genre: data.genre,
                         popularity: data.popular,
                         artist: data.artist,
+                        artistId: data.artistId,
                         albumArt: data.albumArt,
                         isPlaying: data.isPlaying,
                         recentlyPlayed: data.recentlyPlayed,
@@ -139,8 +141,10 @@ export default function NowPlaying() {
                                             {trackData.track}
                                         </p>
                                         <p className="text-lg text-gray-400">{trackData.artist}</p>
-                                        <p>Genre: {trackData.genre}</p>
-                                        <p className="mt-2 text-2xl">{trackData.isPlaying ? "🔊" : "🔇"}</p>
+                                        <p>{trackData.genre}</p>
+                                        <p className="mt-2 text-2xl">{trackData.isPlaying ? "🔊" : "Paused/Nothing Playing"}</p>
+                                        <Artist artistId={trackData.artistId || ''} />
+
                                     </div>
 
                                     {trackData.albumArt && (
@@ -158,6 +162,7 @@ export default function NowPlaying() {
                             {/* Right Most Played */}
                             <div className="flex-grow grid place-items-center p-4">
                                 <Popularity popularity={trackData.popularity} />
+
                             </div>
                         </div>
                     ) : (
