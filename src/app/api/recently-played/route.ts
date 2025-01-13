@@ -20,7 +20,7 @@ export async function GET() {
         console.log(accessToken)
 
         // Fetch
-        const response = await fetch(`https://api.spotify.com/v1/audio-features/0yJiK3DZ4ypc3HL2AGxvPR`, {
+        const response = await fetch(`https://api.spotify.com/v1/me/player/recently-played?limit=1`, {
             headers: {
                 Authorization: `Bearer ${accessToken}`,
             },

@@ -16,34 +16,47 @@ export async function GET() {
             return NextResponse.json({error: "Unauthroized"}, { status: 401 });
         }
 
+        const urls = [
+            "https://api.spotify.com/v1/me/player/currently-playing",
+            "https://api.spotify.com/v1/me/player/recently-played?limit=5",
+        ];
+
         const accessToken = session.accessToken;
         console.log(accessToken)
 
-        // Fetch
-        const response = await fetch("https://api.spotify.com/v1/me/player/currently-playing", {
-                headers: {
-                    Authorization: `Bearer ${accessToken}`,
-                },
-        });
+        // Make multiple requests concurrently
+        const response = await Promise.all(
+            urls.map(url =>
+                fetch(url, {
+                    headers: {
+                        Authorization: `Bearer ${accessToken}`,
+                    },
+                })
+            )
+        );
 
-        console.log(response)
+        console.log("DATA FROM SPOTIFY: ", response)
 
-        if (response.status === 204 || response.status > 400) {
-            return NextResponse.json({playing: false});
+        // Check for errors in the responses
+        if (response.some(response => response.status === 204 || response.status > 400)) {
+            return NextResponse.json({ playing: false });
         }
 
-        const data = await response.json();
-        console.log(data)
+        // Process the responses
+        const [currentlyPlayingData, topArtistsData] = await Promise.all(response.map(response => response.json()));
+        console.log(currentlyPlayingData, topArtistsData);
 
+        // We will use track to store the data we need even if it is not currently playing
         const track = {
-            trackId: data.item.id,
-            track: data.item.name,
-            popular: data.item.popularity,
-            artist: data.item.artists.map((artist: Artist) => artist.name).join(", "),
-            albumArt: data.item.album.images[0].url,
-            genre: data.item.genre,
-            isPlaying: data.is_playing,
-        }
+            trackId: currentlyPlayingData.item.id,
+            track: currentlyPlayingData.item.name,
+            popular: currentlyPlayingData.item.popularity,
+            artist: currentlyPlayingData.item.artists.map((artist: Artist) => artist.name).join(", "),
+            albumArt: currentlyPlayingData.item.album.images[0].url,
+            genre: currentlyPlayingData.item.genre,
+            isPlaying: currentlyPlayingData.is_playing,
+            recentlyPlayed: topArtistsData.items,
+        };
         return NextResponse.json(track);
     } catch (error) {
         console.error("Error fetching Spotify data:", error);

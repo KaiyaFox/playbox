@@ -6,17 +6,27 @@ import Image from "next/image";
 import AuthButton from "@/app/components/authButton";
 import Popularity from "@/app/components/popular";
 import MostPlayedSongs from "@/app/components/mostPlayedSongs";
-import {session} from "next-auth/core/routes";
+import RecentlyPlayed from "@/app/components/recentlyPlayed";
 
+
+interface RecentlyPlayedItem {
+    track: {
+        name: string;
+    };
+    played_at: string;
+    context: string | null;
+}
 
 
 interface TrackData {
     trackId?: string;
     track?: string;
+    genre?: string;
     popularity?: string;
     artist?: string;
     albumArt?: string;
     isPlaying?: boolean;
+    recentlyPlayed?: RecentlyPlayedItem[];
 }
 
 
@@ -26,21 +36,22 @@ export default function NowPlaying() {
 
 
     useEffect(() => {
-        // Fetch the current track
         const fetchNowPlaying = async () => {
             try {
                 console.log("Fetching now now-playing track...");
                 const response = await fetch("api/now-playing");
                 if (response.ok) {
                     const data = await response.json();
-                    console.log(data);
+                    console.log("DATA: ", data);
                     setTrackData({
                         trackId: data.trackId,
                         track: data.track,
+                        genre: data.genre,
                         popularity: data.popular,
                         artist: data.artist,
                         albumArt: data.albumArt,
                         isPlaying: data.isPlaying,
+                        recentlyPlayed: data.recentlyPlayed,
                     });
                 } else {
                     setTrackData(null);
@@ -49,20 +60,12 @@ export default function NowPlaying() {
                 console.error("Error fetching now now-playing track:", error);
                 setTrackData(null);
             }
-            // const data: TrackData = await response.json();
-
-            // // Only update if track id changes
-            // if (data.trackId !== previousTrackId.current) {
-            //     previousTrackId.current = data.trackId;
-            //     setTrackData(data)
-            // }
         };
 
         fetchNowPlaying(); // Init
         const interval = setInterval(fetchNowPlaying, 15000); // Poll every 15 seconds
         return () => clearInterval(interval); // Cleanup
-    },
-    []);
+    }, []);
 
     // 🎨 Vanta Background Effect
     useEffect(() => {
@@ -112,7 +115,7 @@ export default function NowPlaying() {
                         <div className="flex flex-col lg:flex-row w-full gap-4">
                             {/* Left Most Played */}
                             <div className="flex-grow grid place-items-center p-4">
-                                <MostPlayedSongs />
+                                <RecentlyPlayed recentlyPlayed={trackData.recentlyPlayed} />
                             </div>
 
                             {/* Center Track Data */}
