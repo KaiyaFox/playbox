@@ -27,7 +27,7 @@ export default function RecentlyPlayed({recentlyPlayed}: RecentlyPlayedProps) {
     return (
         <div>
             <ul className="list bg-base-300 rounded-box shadow-md">
-                <li className="p-4 pb-2 text-sm opacity-60 tracking-wide">Recently Played</li>
+                <li className="p-4 pb-2 text-sm opacity-60 tracking-wide">Your Recently Played</li>
                 {recentlyPlayed.map((item, index) => (
                     <li key={index} className="list-row">
                         <div className="text-4xl font-thin opacity-30 tabular-nums text-right">{index + 1}</div>
