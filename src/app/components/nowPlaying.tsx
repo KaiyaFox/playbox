@@ -135,7 +135,7 @@ export default function NowPlaying() {
                                 <div className="text-center">
                                     <h1 className="text-4xl sm:text-5xl font-bold text-purple-400 mb-3">
                                         Now Bumpin
-                                        <p className="mt-2 text-2xl">{trackData.isPlaying ? "🔊" : "Paused/Nothing Playing"}</p>
+                                        <p className="mt-2 text-2xl">{trackData.isPlaying ? "🔊" : "Spotify Paused. Play something on spotify."}</p>
 
                                     </h1>
 
