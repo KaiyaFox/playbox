@@ -32,7 +32,8 @@ export default function TopArtist() {
         }
         fetchStats();
     }, []);
-    return (
+    return stats ? (
+        <>
         <div className="stats shadow">
             <div className="stat">
                 <div className="stat-figure text-primary">
@@ -53,6 +54,15 @@ export default function TopArtist() {
                 <div className="stat-desc">You and {Number(stats?.followers).toLocaleString()} others vibe with this
                     artist
                 </div>
+            </div>
+        </div>
+        </>
+    ) : (
+        <div className="stats shadow">
+            <div className="stat">
+                <div className="stat-title">Your Affinity</div>
+                <div className="stat-value">Not Available</div>
+                <div className="stat-desc">Not Available</div>
             </div>
         </div>
     )
