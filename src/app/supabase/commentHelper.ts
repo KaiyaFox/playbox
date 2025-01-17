@@ -13,11 +13,11 @@ if (!supabaseUrl || !supabaseKey) {
 const supabase = createClient(supabaseUrl, supabaseKey);
 
 // To save a note:
-export const saveNote = async (note: string, rating: number, songId: string) => {
+export const postComment = async (comment: string, songId: string, userId: string) => {
     const { data, error } = await supabase
-        .from('songs')
+        .from('comments')
         .insert([
-            { note: note, rating: rating, songId: songId, created_at: new Date() },
+            { comment: comment, song_id: songId, user_id: userId },
         ]);
     if (error) {
         console.error('Error saving note:', error);

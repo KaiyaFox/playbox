@@ -6,7 +6,7 @@ export async function GET(req: NextRequest) {
     try {
         const { searchParams } = new URL(req.url);
         const artistId = searchParams.get("artistId");
-        console.log("Artist ID:", artistId);
+        // console.log("Artist ID:", artistId);
 
         const session = await getServerSession(authOptions);
 
@@ -15,7 +15,7 @@ export async function GET(req: NextRequest) {
         }
 
         const accessToken = session.accessToken;
-        console.log(accessToken);
+        // console.log(accessToken);
 
         // Fetch data from Spotify API
         const response = await fetch(`https://api.spotify.com/v1/artists/${artistId}`, {
@@ -24,14 +24,14 @@ export async function GET(req: NextRequest) {
             },
         });
 
-        console.log("Artist response:", response);
+        // console.log("Artist response:", response);
 
         if (response.status === 204 || response.status > 400) {
             return NextResponse.json({ playing: false });
         }
 
         const data = await response.json();
-        console.log("Artist data:", data);
+        // console.log("Artist data:", data);
 
         const artist = {
             artistId: data.id,

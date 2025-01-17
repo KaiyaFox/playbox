@@ -17,7 +17,7 @@ export async function GET() {
         }
 
         const accessToken = session.accessToken;
-        console.log(accessToken)
+        // console.log(accessToken)
 
         // Fetch
         const response = await fetch(`https://api.spotify.com/v1/me/player/recently-played?limit=10`, {
@@ -26,14 +26,14 @@ export async function GET() {
             },
         });
 
-        console.log("From spotify", response)
+        // console.log("From spotify", response)
 
         if (response.status === 204 || response.status > 400) {
             return NextResponse.json({playing: false});
         }
 
         const data = await response.json();
-        console.log(data)
+        // console.log(data)
 
         const track = {
             trackId: data.item.id,

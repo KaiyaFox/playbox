@@ -3,12 +3,14 @@
 import {useEffect} from "react";
 import { useState } from "react";
 import Image from "next/image";
+import { useSession } from "next-auth/react";
 import AuthButton from "@/app/components/authButton";
 import Popularity from "@/app/components/popular";
 import RecentlyPlayed from "@/app/components/recentlyPlayed";
 import Artist from "@/app/components/Artist";
 import TopArtist from "@/app/components/TopArtist";
-import Notes from "@/app/components/notes";
+import Comments from "@/app/components/comments";
+import { addSongToDatabase } from "@/app/supabase/addSong";
 
 interface RecentlyPlayedItem {
     track: {
@@ -41,6 +43,7 @@ interface TrackData {
 
 
 export default function NowPlaying() {
+    const { data: session } = useSession();
     const [trackData,setTrackData] = useState<TrackData | null>(null);
 
 
@@ -52,6 +55,7 @@ export default function NowPlaying() {
                 const response = await fetch("api/now-playing");
                 if (response.ok) {
                     const data = await response.json();
+                    await addSongToDatabase(data.trackId, data.track, data.artist, '-', data.albumArt);
                     console.log("DATA: ", data);
                     setTrackData({
                         trackId: data.trackId,
@@ -131,7 +135,7 @@ export default function NowPlaying() {
                                 <TopArtist/>
                                 <div className="text-center">
                                     <h1 className="text-4xl sm:text-5xl font-bold text-purple-400 mb-3">
-                                        <Notes/>
+                                        <Comments spotifyId={trackData.trackId || ''} userId={session?.user?.email || ''} track={trackData.track || ''}/>
                                     </h1>
                                 </div>
                             </div>

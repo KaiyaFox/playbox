@@ -37,7 +37,7 @@ export async function GET() {
         }
 
         const artist = data.items[0];
-        console.log("Top Artist:", artist);
+        // console.log("Top Artist:", artist);
 
         return NextResponse.json({ artist });
 

@@ -23,7 +23,7 @@ export async function GET() {
         ];
 
         const accessToken = session.accessToken
-        console.log(accessToken)
+        // console.log(accessToken)
 
         // Make multiple requests concurrently
         const response = await Promise.all(
@@ -36,7 +36,7 @@ export async function GET() {
             )
         );
 
-        console.log("DATA FROM SPOTIFY: ", response)
+        // console.log("DATA FROM SPOTIFY: ", response)
 
         // Check for errors in the responses
         if (response.some(response => response.status === 204 || response.status > 400)) {
@@ -45,7 +45,7 @@ export async function GET() {
 
         // Process the responses
         const [currentlyPlayingData, topArtistsData] = await Promise.all(response.map(response => response.json()));
-        console.log(currentlyPlayingData, topArtistsData);
+        // console.log(currentlyPlayingData, topArtistsData);
 
         // We will use track to store the data we need even if it is not currently playing
         const track = {
