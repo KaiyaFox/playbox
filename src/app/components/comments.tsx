@@ -72,51 +72,44 @@ export default function Comments({ spotifyId, userId, track }: CommentProps) {
     };
 
     return (
-        <div className="comments-section rounded p-10 max-w-3xl">
-            <p className="text-gray-500 text-2xl">Comments </p>
-    <p className="divider text-sm">{track}</p>
-            {/* Comments list */}
+        <div className="comments-section bg-gray-900/70 rounded-md p-4 max-w-2xl mx-auto shadow-md backdrop-blur-sm">
+            <h2 className="text-gray-100 text-lg font-medium mb-2">Comments</h2>
+            <p className="divider text-xs text-gray-500 mb-3">{track}</p>
+
             {isLoading ? (
-                <p>Loading comments...</p>
+                <p className="text-gray-400 text-sm">Loading comments...</p>
             ) : comments.length > 0 ? (
-                <div className="comments-list overflow-y-scroll max-h-60 pr-2">
-                    <ul>
-                        {comments.map((comment) => (
-                            <li key={comment.id} className="mb-4">
-                                <p className="text-lg text-purple-500 bg-gray-800 rounded">{comment.users?.name.toUpperCase() || "Anon"}: {comment.comment}</p>
-                            </li>
-                        ))}
-                    </ul>
+                <div className="comments-list overflow-y-auto max-h-40 pr-1 space-y-2">
+                    {comments.map((comment) => (
+                        <div key={comment.id} className="bg-gray-800/50 p-2 rounded-md">
+                            <div className="flex flex-col text-left break-words overflow-auto">
+                                <p className="text-xs text-purple-400 font-semibold break-words">{comment.users?.name.toUpperCase() || "Anon"}</p>
+                                <p className="text-gray-200 text-sm mt-1 break-words overflow ">{comment.comment}</p>
+                            </div>
+                        </div>
+                    ))}
                 </div>
             ) : (
-                <div className="text-sm">
-                    <p>No comments on <strong>{track}</strong> yet.</p>
-
-
-                </div>
+                <p className="text-gray-400 text-sm italic">No comments on <strong>{track}</strong> yet.</p>
             )}
 
-            {/* Comment form */
-            }
-            <div>
-                <textarea
-                    style={{
-                        resize: 'both',
-                        maxWidth: '300px',
-                        maxHeight: '300px',
-                        minWidth: '300px',
-                        minHeight: '200px'
-                    }}
-                    className="textarea textarea-lg max-h-50 bg-gray-700 mt-2"
-                    placeholder="🎶 Comment on this track..."
-                    value={commentText}
-                    onChange={(e) => setCommentText(e.target.value)}
-                ></textarea>
-        <div className="">
-            <button onClick={handleClick} className="btn btn-wide btn">Post</button>
+            <div className="mt-4">
+    <textarea
+        className="textarea textarea-bordered w-full h-24 bg-gray-800/70 text-gray-200 placeholder-gray-500 rounded-md focus:ring-1 focus:ring-purple-500 text-sm"
+        placeholder="🎶 Share your thoughts..."
+        value={commentText}
+        onChange={(e) => setCommentText(e.target.value)}
+    ></textarea>
+                <button
+                    onClick={handleClick}
+                    className="btn btn-primary btn-block mt-2 text-sm hover:scale-105 transition-transform duration-150"
+                >
+                    Post
+                </button>
+            </div>
         </div>
-    </div>
-</div>
-)
-    ;
+
+
+    )
+        ;
 }
