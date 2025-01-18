@@ -1,8 +1,7 @@
 import SpotifyProvider from "next-auth/providers/spotify";
 import { JWT } from "next-auth/jwt";
-import {Account, NextAuthOptions, Profile, User} from "next-auth";
+import { NextAuthOptions, Profile} from "next-auth";
 import { createClient} from "@supabase/supabase-js";
-import {AdapterUser} from "next-auth/adapters";
 
 interface SpotifyProfile extends Profile {
     id: string;
@@ -22,6 +21,7 @@ declare module "next-auth" {
         refreshToken?: string;
         expiresAt?: number;
         supabaseUserId?: string;
+        error?: string;
     }
 }
 
@@ -32,6 +32,7 @@ declare module "next-auth/jwt" {
         refreshToken?: string;
         expiresAt?: number;
         supabaseUserId: string;
+        error?: string;
     }
 }
 
@@ -55,7 +56,9 @@ export const authOptions: NextAuthOptions = {
                 token.accessToken = account.access_token as string;
                 token.refreshToken = account.refresh_token;
                 token.expiresAt = account.expires_at ? account.expires_at * 1000 : undefined;
+                //token.expiresAt = Date.now() - 1000
                 console.log("Spotify Profile:", spotifyProfile);
+
 
 
                 // Check for email in Supabase
@@ -84,17 +87,64 @@ export const authOptions: NextAuthOptions = {
                 } else {
                     token.supabaseUserId = spotifyProfile.id;
                 }
+                // Handle expired tokens
+                if (Date.now() < (token.expiresAt || 0)) {
+                    return token;
+                }
+
+                // If access token has expired, refresh it
+                return refreshAccessToken(token);
             }
             return token;
         },
         // Add the user to the session
         async session({ session, token }) {
-            session.accessToken = token.accessToken as string;
+            session.accessToken = token.accessToken;
             session.refreshToken = token.refreshToken;
             session.expiresAt = token.expiresAt;
+            session.error = token.error;
             return session;
         }
 
 
     },
+}
+
+async function refreshAccessToken(token: JWT): Promise<JWT> {
+    try {
+        console.log("Refresh access token:", token.accessToken);
+        const response = await fetch("https://accounts.spotify.com/api/token", {
+            method: "POST",
+            headers: {
+                "Content-Type": "application/x-www-form-urlencoded",
+                Authorization: `Basic ${Buffer.from(
+                    `${process.env.SPOTIFY_CLIENT_ID}:${process.env.SPOTIFY_CLIENT_SECRET}`
+                ).toString("base64")}`,
+            },
+            body: new URLSearchParams({
+                grant_type: "refresh_token",
+                refresh_token: token.refreshToken as string,
+            }),
+        });
+
+        const refreshedToken = await response.json();
+
+        if (!response.ok) {
+            throw new Error("Failed to refresh access token");
+        }
+
+        return {
+            ...token,
+            accessToken: refreshedToken.access_token,
+            expiresAt: Date.now() + refreshedToken.expires_in * 1000, // Expiration time in ms
+            refreshToken: refreshedToken.refresh_token || token.refreshToken, // Use new refresh token if provided
+        };
+    } catch (error) {
+        console.error("Error refreshing access token:", error);
+
+        return {
+            ...token,
+            error: "RefreshAccessTokenError",
+        };
+    }
 }

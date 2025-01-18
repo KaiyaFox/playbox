@@ -52,7 +52,7 @@ export async function addCommentToSong(userId: string, songId: string, comment: 
 export async function getCommentsForSong(songId: string) {
     const { data, error } = await supabase
         .from('comments')
-        .select('*')
+        .select('id, song_id, comment, created_at, user_id, users!user_id (name)')
         .eq('song_id', songId);
 
 

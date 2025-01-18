@@ -34,36 +34,41 @@ export default function TopArtist() {
     }, []);
     return stats ? (
         <>
-        <div className="stats shadow">
-            <div className="stat">
-                <div className="stat-figure text-primary">
-                    <div className="avatar">
-                        <div className="w-16 rounded-full">
-                            <Image
-                                src={stats?.affinityImage || ''}
-                                alt="Album Art"
-                                width={600}
-                                height={600}
-                                className="rounded-3xl shadow-xl opacity-90 mb-4"
-                            />
+            <div className="tooltip tooltip-bottom"
+                 data-tip="Your affinity artist is the top artist you interact with on Spotify. PlayBox updates this
+                 periodically and this can change from week to week depending on your listening activity">
+                <div className="stats shadow">
+                    <div className="stat">
+                        <div className="stat-figure text-primary">
+                            <div className="avatar">
+                                <div className="w-16 rounded-full">
+                                    <Image
+                                        src={stats?.affinityImage || ''}
+                                        alt="Album Art"
+                                        width={600}
+                                        height={600}
+                                        className="rounded-3xl shadow-xl opacity-90 mb-4"
+                                    />
+                                </div>
+                            </div>
+                        </div>
+                        <div className="stat-title">Your Affinity</div>
+                        <div className="stat-value text-primary">{stats?.topAffinity}</div>
+                        <div className="stat-desc">You and {Number(stats?.followers).toLocaleString()} others vibe with
+                            this
+                            artist
                         </div>
                     </div>
                 </div>
-                <div className="stat-title">Your Affinity</div>
-                <div className="stat-value text-primary">{stats?.topAffinity}</div>
-                <div className="stat-desc">You and {Number(stats?.followers).toLocaleString()} others vibe with this
-                    artist
+            </div>
+            </>
+            ) : (
+            <div className="stats shadow">
+                <div className="stat">
+                    <div className="stat-title">Your Affinity</div>
+                    <div className="stat-value">Not Available</div>
+                    <div className="stat-desc">Not Available</div>
                 </div>
             </div>
-        </div>
-        </>
-    ) : (
-        <div className="stats shadow">
-            <div className="stat">
-                <div className="stat-title">Your Affinity</div>
-                <div className="stat-value">Not Available</div>
-                <div className="stat-desc">Not Available</div>
-            </div>
-        </div>
-    )
-}
+            )
+            }

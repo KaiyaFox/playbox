@@ -1,6 +1,7 @@
 import { useState, useEffect } from 'react';
 import { addCommentToSong } from "@/app/supabase/addSong";
 import { getCommentsForSong } from "@/app/supabase/addSong";
+import AlertMessage from "@/app/components/AlertMessage";
 
 interface CommentProps {
     spotifyId: string;
@@ -9,12 +10,14 @@ interface CommentProps {
 }
 
 interface Comment {
+    users: string;
     comment: string;
     display_name: string;
     id: string;
     userId: string;
     text: string;
     createdAt: string; // Optional: For sorting, if your backend supports it
+    count: number;
 }
 
 export default function Comments({ spotifyId, userId, track }: CommentProps) {
@@ -22,6 +25,7 @@ export default function Comments({ spotifyId, userId, track }: CommentProps) {
     const [comments, setComments] = useState<Comment[]>([]);
     const [isLoading, setIsLoading] = useState(true);
     const [currentSpotifyId, setCurrentSpotifyId] = useState(spotifyId);
+    const [alertMessages, setAlertMessages] = useState<AlertMessage[]>([]);
 
     // Fetch comments on component mount or when spotifyId changes
     useEffect(() => {
@@ -31,8 +35,8 @@ export default function Comments({ spotifyId, userId, track }: CommentProps) {
         }
 
         if (commentText.trim() !== '') {
-            alert(`You were typing a comment for a previous song. If you post the current text, it will NOT be posted 
-            on the current playing track: ${track}`)
+            // Alert
+           // setAlertMessages()
         } else {
             setCurrentSpotifyId(spotifyId); // Update only if comment in progress
         }
@@ -68,9 +72,9 @@ export default function Comments({ spotifyId, userId, track }: CommentProps) {
     };
 
     return (
-        <div className="comments-section rounded p-20 max-w-3xl bg-gradient-to-b ">
-            <p className="text-gray-500 text-2xl">Comments on: {track}</p>
-            <div className="divider"></div>
+        <div className="comments-section rounded p-10 max-w-3xl">
+            <p className="text-gray-500 text-2xl">Comments </p>
+    <p className="divider text-sm">{track}</p>
             {/* Comments list */}
             {isLoading ? (
                 <p>Loading comments...</p>
@@ -79,15 +83,14 @@ export default function Comments({ spotifyId, userId, track }: CommentProps) {
                     <ul>
                         {comments.map((comment) => (
                             <li key={comment.id} className="mb-4">
-                                <p className="font-semibold text-sm text-gray-800">{comment.user_id}:</p>
-                                <p className="text-lg text-purple-500">{comment.comment}</p>
+                                <p className="text-lg text-purple-500 bg-gray-800 rounded">{comment.users?.name.toUpperCase() || "Anon"}: {comment.comment}</p>
                             </li>
                         ))}
                     </ul>
                 </div>
             ) : (
                 <div className="text-sm">
-                    <p>No comments yet. Be the first to comment!</p>
+                    <p>No comments on <strong>{track}</strong> yet.</p>
 
 
                 </div>
@@ -105,7 +108,7 @@ export default function Comments({ spotifyId, userId, track }: CommentProps) {
                         minHeight: '200px'
                     }}
                     className="textarea textarea-lg max-h-50 bg-gray-700 mt-2"
-                    placeholder="🎶 Comment on track ${track}"
+                    placeholder="🎶 Comment on this track..."
                     value={commentText}
                     onChange={(e) => setCommentText(e.target.value)}
                 ></textarea>

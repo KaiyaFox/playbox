@@ -11,6 +11,15 @@ export default function AuthButton() {
     const avatar = session?.user?.image;
     const userName = session?.user?.name ?? "U";
     const firstLetter = userName.charAt(0)
+    
+    // Convert session unix time to human read
+
+
+    if (!session) {
+        console.log("No Session!")
+    } else {
+        console.log(`Session active! Expires ${session.expiresAt}`, Date.now());
+    }
 
     return session ? (
         <>
