@@ -34,7 +34,7 @@ export default function TopArtist() {
     }, []);
     return stats ? (
         <>
-            <div className="tooltip tooltip-bottom"
+            <div className="tooltip tooltip-bottom text-left"
                  data-tip="Your affinity artist is the top artist you interact with on Spotify. PlayBox updates this
                  periodically and this can change from week to week depending on your listening activity">
                 <div className="stats shadow">

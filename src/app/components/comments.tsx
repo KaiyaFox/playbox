@@ -72,7 +72,7 @@ export default function Comments({ spotifyId, userId, track }: CommentProps) {
     };
 
     return (
-        <div className="comments-section bg-gray-900/70 rounded-md p-4 max-w-2xl mx-auto shadow-md backdrop-blur-sm">
+        <div className="comments-section list bg-base-300/30 rounded-box shadow-md rounded-md p-10 max-w-2xl mx-auto shadow-md backdrop-blur-sm">
             <h2 className="text-gray-100 text-lg font-medium mb-2">Comments</h2>
             <p className="divider text-xs text-gray-500 mb-3">{track}</p>
 

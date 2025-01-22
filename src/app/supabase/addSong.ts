@@ -1,18 +1,14 @@
-import { createClient} from "@supabase/supabase-js";
-
-const supabase = createClient(
-    process.env.NEXT_PUBLIC_SUPABASE_URL!,
-    process.env.NEXT_PUBLIC_SUPABASE_KEY!
-);
+import { supabase } from "@/lib/supabaseClient";
 
 // Add a song if not already in the database. We pass in the spotify ID to check if the song is already in the database.
 export async function addSongToDatabase(spotifyId: string, name: string, artist: string, album: string, image: string) {
-    console.log('Adding song to database:', name, artist, album, image);
     if (!spotifyId) {
-        console.error('No Spotify ID provided');
+        console.log('No Spotify song ID provided. Database call skipped.');
         return;
     }
+    console.log('Adding song to database:', name, artist, album, image);
     const { data, error } = await supabase
+
         .from('songs')
         .upsert([
             {

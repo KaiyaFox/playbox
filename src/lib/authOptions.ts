@@ -49,15 +49,33 @@ export const authOptions: NextAuthOptions = {
 
     callbacks: {
         async jwt({token, account, profile}) {
-            console.log("Callback")
+            console.log("JWT Callback Triggered")
+            console.log("Token:", token);
+            console.log("Refresh token:", token?.refreshToken);
+            console.log("Account:", account);
+            console.log("Profile:", profile);
 
             if (account && profile) {
+                console.log("inital sign in detected.")
                 const spotifyProfile = profile as SpotifyProfile;
                 token.accessToken = account.access_token as string;
                 token.refreshToken = account.refresh_token;
                 token.expiresAt = account.expires_at ? account.expires_at * 1000 : undefined;
                 //token.expiresAt = Date.now() - 1000
                 console.log("Spotify Profile:", spotifyProfile);
+                console.log("Refresh:", token.refreshToken);
+
+                if (!token.refreshToken) {
+                    console.warn("No refresh token received during initial sign in.")
+                    return token;
+                }
+
+                if (Date.now() >= (token.expiresAt || 0)) {
+                    console.log("Access token expired. Attempting to refresh...");
+                    token = await refreshAccessToken(token); // Call your refresh logic
+                }
+
+
 
 
 
@@ -92,6 +110,14 @@ export const authOptions: NextAuthOptions = {
                     return token;
                 }
 
+                console.log("Current time:", Date.now());
+                console.log("Token expires at:", token.expiresAt);
+                if (Date.now() >= (token.expiresAt || 0)) {
+                    console.log("Token expired. Attempting to refresh...");
+                    return refreshAccessToken(token);
+                }
+
+
                 // If access token has expired, refresh it
                 return refreshAccessToken(token);
             }
@@ -110,9 +136,11 @@ export const authOptions: NextAuthOptions = {
     },
 }
 
+
 async function refreshAccessToken(token: JWT): Promise<JWT> {
     try {
         console.log("Refresh access token:", token.accessToken);
+        console.log("Refresh token:", token.refreshToken);
         const response = await fetch("https://accounts.spotify.com/api/token", {
             method: "POST",
             headers: {

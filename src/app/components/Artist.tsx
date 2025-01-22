@@ -53,7 +53,7 @@ export default function Artist({ artistId }: ArtistProps) {
                 <div className="stat-value">
                     {artistData?.genre && artistData.genre.length > 0
                         ? artistData.genre.map((g, idx) => (
-                            <div key={idx} className="badge badge-primary mr-1">
+                            <div key={idx} className="badge badge-primary mr-2">
                                 {g}
                             </div>
                         ))

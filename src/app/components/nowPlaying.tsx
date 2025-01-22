@@ -8,7 +8,6 @@ import AuthButton from "@/app/components/authButton";
 import Popularity from "@/app/components/popular";
 import RecentlyPlayed from "@/app/components/recentlyPlayed";
 import Artist from "@/app/components/Artist";
-import TopArtist from "@/app/components/TopArtist";
 import Comments from "@/app/components/comments";
 import { addSongToDatabase } from "@/app/supabase/addSong";
 
@@ -92,7 +91,7 @@ export default function NowPlaying() {
             const vantaScript = document.createElement("script");
             vantaScript.src = "https://cdn.jsdelivr.net/gh/tengbao/vanta@latest/dist/vanta.dots.min.js";
             vantaScript.async = true;
-
+            
             threeScript.onload = () => {
                 document.body.appendChild(vantaScript);
             };
@@ -122,29 +121,29 @@ export default function NowPlaying() {
 
     return (
         <>
-            <div className="relative flex items-center justify-center min-h-[calc(100vh-4rem)] px-4 pt-20 sm:pt-24">
+            <div className="relative flex items-center justify-center min-h-[calc(100vh-1rem)] px-4 pt-20 sm:pt-24">
                 {/* Vanta Background */}
                 <div id="vanta-background" className="fixed inset-0 z-0 w-full h-full opacity-100" />
 
                 {/* Main Content */}
-                <div className="relative z-10 flex flex-col items-center justify-center w-full">
+                <div className="absolute z-10 flex">
                     {trackData ? (
                         <div className="flex flex-col lg:flex-row w-full gap-4">
                             {/* Left Most Played */}
-                            <div className="flex-grow grid place-items-center p-4">
-                                <TopArtist/>
-                                <div className="text-center">
-                                    <h1 className="text-4xl sm:text-5xl font-bold text-purple-400 mb-3">
-                                        <Comments spotifyId={trackData.trackId || ''} userId={session?.user?.email || ''} track={trackData.track || ''}/>
-                                    </h1>
-                                </div>
+                            <div className="flex-grow grid place-items-center p-4 text-left">
+                                <h1 className="text-4xl sm:text-5xl font-bold text-purple-400 mb-3 text-center">
+                                    <Comments spotifyId={trackData.trackId || ''} userId={session?.user?.email || ''}
+                                              track={trackData.track || ''}/>
+                                </h1>
                             </div>
+
+
 
                             {/* Center Track Data */}
                             <div className="flex-grow grid place-items-center">
                                 <div className="text-center">
                                     <h1 className="text-4xl sm:text-5xl font-bold text-purple-400 mb-3">
-                                    Now Bumpin
+                                        Now Bumpin
                                         <p className="mt-2 text-2xl">{trackData.isPlaying ? "🔊" : "Spotify Paused. Play something on spotify."}</p>
 
                                     </h1>
@@ -155,9 +154,12 @@ export default function NowPlaying() {
                                         </p>
                                         <p className="text-lg text-gray-400">{trackData.artist}</p>
                                         <p>{trackData.genre}</p>
-                                        <Popularity popularity={trackData.popularity} />
+                                        <Popularity popularity={trackData.popularity}/>
 
 
+                                    </div>
+                                    <div className="items-center justify-center text-center text-2xl">
+                                        <Artist artistId={trackData.artistId || ''}/>
                                     </div>
 
                                     {trackData.albumArt && (
@@ -169,9 +171,6 @@ export default function NowPlaying() {
                                             className="rounded-3xl shadow-xl opacity-90 mb-4"
                                         />
                                     )}
-                                </div>
-                                <div className="items-center justify-center text-center text-2xl">
-                                <Artist artistId={trackData.artistId || ''} />
                                 </div>
 
                             </div>
