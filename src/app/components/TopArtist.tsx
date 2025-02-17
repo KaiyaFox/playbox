@@ -53,8 +53,8 @@ export default function TopArtist() {
                             </div>
                         </div>
                         <div className="stat-title">Your Affinity</div>
-                        <div className="stat-value text-primary">{stats?.topAffinity}</div>
-                        <div className="stat-desc">You and {Number(stats?.followers).toLocaleString()} others vibe with
+                        <div className="stat-value text-primary">{stats?.topAffinity || "Not Available"}</div>
+                        <div className="stat-desc">You and {Number(stats?.followers).toLocaleString() || "N/A"} others vibe with
                             this
                             artist
                         </div>

@@ -10,6 +10,7 @@ import RecentlyPlayed from "@/app/components/recentlyPlayed";
 import Artist from "@/app/components/Artist";
 import Comments from "@/app/components/comments";
 import { addSongToDatabase } from "@/app/supabase/addSong";
+import TopArtist from "@/app/components/TopArtist";
 
 interface RecentlyPlayedItem {
     track: {
@@ -44,6 +45,7 @@ interface TrackData {
 export default function NowPlaying() {
     const { data: session } = useSession();
     const [trackData,setTrackData] = useState<TrackData | null>(null);
+    const [] = useState<Comment[]>([]);
 
 
 
@@ -67,6 +69,8 @@ export default function NowPlaying() {
                         isPlaying: data.isPlaying,
                         recentlyPlayed: data.recentlyPlayed,
                     });
+                    if (!session) return;
+
                 } else {
                     setTrackData(null);
                 }
@@ -132,8 +136,13 @@ export default function NowPlaying() {
                             {/* Left Most Played */}
                             <div className="flex-grow grid place-items-center p-4 text-left">
                                 <h1 className="text-4xl sm:text-5xl font-bold text-purple-400 mb-3 text-center">
-                                    <Comments spotifyId={trackData.trackId || ''} userId={session?.user?.email || ''}
-                                              track={trackData.track || ''}/>
+                                    <Comments
+                                        spotifySongId={trackData.trackId || ''}
+                                        userId={session?.user?.email || ''}
+                                        track={trackData.track || ''}
+                                        onCommentsFetched={(comments) => console.log(comments)}
+
+                                    />
                                 </h1>
                             </div>
 
@@ -141,17 +150,19 @@ export default function NowPlaying() {
 
                             {/* Center Track Data */}
                             <div className="flex-grow grid place-items-center">
-                                <div className="text-center">
-                                    <h1 className="text-4xl sm:text-5xl font-bold text-purple-400 mb-3">
-                                        Now Bumpin
-                                        <p className="mt-2 text-2xl">{trackData.isPlaying ? "🔊" : "Spotify Paused. Play something on spotify."}</p>
 
+                                <div className="text-center">
+                                    <TopArtist/>
+                                    <p className="divider"/>
+
+                                    <h1 className="text-4xl sm:text-5xl font-bold text-purple-400 mb-3">
                                     </h1>
 
                                     <div className="p-5 rounded-xl mb-4">
                                         <p className="text-2xl sm:text-3xl text-white font-semibold">
                                             {trackData.track}
                                         </p>
+                                        <p className="mt-2 text-2xl">{trackData.isPlaying ? "🔊" : "Spotify Paused. Play something on spotify."}</p>
                                         <p className="text-lg text-gray-400">{trackData.artist}</p>
                                         <p>{trackData.genre}</p>
                                         <Popularity popularity={trackData.popularity}/>

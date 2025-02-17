@@ -1,4 +1,5 @@
 import { supabase } from "@/lib/supabaseClient";
+import AlertMessage from "@/app/components/AlertMessage";
 
 // Add a song if not already in the database. We pass in the spotify ID to check if the song is already in the database.
 export async function addSongToDatabase(spotifyId: string, name: string, artist: string, album: string, image: string) {
@@ -18,7 +19,7 @@ export async function addSongToDatabase(spotifyId: string, name: string, artist:
                 album: album,
                 image: image,
             }
-        ], { onConflict: ['spotify_id'] });
+        ], { onConflict: 'spotify_id' });
 
     if (error) {
         console.error('Error adding song:', error);
@@ -40,6 +41,7 @@ export async function addCommentToSong(userId: string, songId: string, comment: 
 
     if (error) {
         console.error('Error adding comment:', error);
+        AlertMessage({message: "Failed to add comment. Please try again later."});
     }
     return data;
 }

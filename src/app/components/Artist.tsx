@@ -34,7 +34,7 @@ export default function Artist({ artistId }: ArtistProps) {
                     });
                     console.log("Current Artist data:", data);
                 } else {
-                    console.error("Failed to fetch artist data");
+                    console.log("Failed to fetch artist data");
                 }
             } catch (error) {
                 console.error("Error fetching artist data:", error);

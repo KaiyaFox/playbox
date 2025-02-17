@@ -1,16 +1,16 @@
 import { useState, useEffect } from 'react';
 import { addCommentToSong } from "@/app/supabase/addSong";
 import { getCommentsForSong } from "@/app/supabase/addSong";
-import AlertMessage from "@/app/components/AlertMessage";
 
 interface CommentProps {
-    spotifyId: string;
+    spotifySongId: string;
     track: string;
     userId: string;
+    onCommentsFetched: (comments: Comment[]) => void;
 }
 
 interface Comment {
-    users: string;
+    users: {name: string }[]; // Assuming users is an array of user objects
     comment: string;
     display_name: string;
     id: string;
@@ -20,32 +20,50 @@ interface Comment {
     count: number;
 }
 
-export default function Comments({ spotifyId, userId, track }: CommentProps) {
+export default function Comments({ spotifySongId, userId, track, onCommentsFetched }: CommentProps) {
     const [commentText, setCommentText] = useState('');
     const [comments, setComments] = useState<Comment[]>([]);
     const [isLoading, setIsLoading] = useState(true);
-    const [currentSpotifyId, setCurrentSpotifyId] = useState(spotifyId);
-    const [alertMessages, setAlertMessages] = useState<AlertMessage[]>([]);
+    const [currentSpotifyId, setCurrentSpotifyId] = useState(spotifySongId);
+    // const [currentSongName, setCurrentSongName] = useState(track);
+    // const [storePreviousSong, setStorePreviousSong] = useState(false);
+    // const [alertMessages, setAlertMessages] = useState<AlertMessage[]>([]);
 
     // Fetch comments on component mount or when spotifyId changes
     useEffect(() => {
         if (commentText.trim().length === 0) {
             // If user hasnt typed shit update the currentspotifyId
-            setCurrentSpotifyId(spotifyId);
+            setCurrentSpotifyId(spotifySongId);
         }
 
-        if (commentText.trim() !== '') {
+        if (commentText.trim() !== '' && currentSpotifyId !== spotifySongId) {
             // Alert
-           // setAlertMessages()
+            alert("You currently written a comment for different song. Either post your comment or clear it to comment on the currently playing song.");
+           setCommentText(commentText)
+            // setAlertMessages()
         } else {
-            setCurrentSpotifyId(spotifyId); // Update only if comment in progress
+            setCurrentSpotifyId(spotifySongId); // Update only if comment in progress
         }
         async function loadComments() {
             try {
                 setIsLoading(true);
-                const fetchedComments = await getCommentsForSong(spotifyId);
-                setComments(fetchedComments || []);
-                console.log("Comments: ", fetchedComments);
+                const fetchedComments = await getCommentsForSong(spotifySongId);
+                const mappedComments = (fetchedComments || []).map(comment => ({
+                    id: comment.id,
+                    song_id: comment.song_id,
+                    comment: comment.comment,
+                    created_at: comment.created_at,
+                    user_id: comment.user_id,
+                    users: comment.users,
+                    display_name: comment.users[0]?.name || 'Anon',
+                    userId: comment.user_id,
+                    text: comment.comment,
+                    createdAt: comment.created_at,
+                    count: 0 // or any default value
+                }));
+                setComments(mappedComments);
+                onCommentsFetched(mappedComments);
+                console.log("Comments: ", mappedComments);
             } catch (err) {
                 console.error("Failed to load comments:", err);
             } finally {
@@ -54,20 +72,37 @@ export default function Comments({ spotifyId, userId, track }: CommentProps) {
         }
 
         loadComments();
-    }, [spotifyId]);
+    }, [spotifySongId, currentSpotifyId, onCommentsFetched, commentText]); // Ensures component reloads when sp
 
     // Handle adding a new comment
     const handleClick = async () => {
         if (!commentText) return; // Prevent empty comments
         try {
-            await addCommentToSong(userId, spotifyId, commentText);
+            await addCommentToSong(userId, spotifySongId, commentText);
             setCommentText('');
-
-            // Optionally reload comments to show the new one
-            const updatedComments = await getCommentsForSong(spotifyId);
-            setComments(updatedComments || []);
+            // Reload comments
+            setIsLoading(true);
+            const fetchedComments = await getCommentsForSong(spotifySongId);
+            const mappedComments = (fetchedComments || []).map(comment => ({
+                id: comment.id,
+                song_id: comment.song_id,
+                comment: comment.comment,
+                created_at: comment.created_at,
+                user_id: comment.user_id,
+                users: comment.users,
+                display_name: comment.users[0]?.name || 'Anon',
+                userId: comment.user_id,
+                text: comment.comment,
+                createdAt: comment.created_at,
+                count: 0 // or any default value
+            }));
+            setComments(mappedComments);
+            onCommentsFetched(mappedComments);
+            console.log("Comments: ", mappedComments);
         } catch (err) {
-            console.error("Failed to add comment:", err);
+            console.error("Failed to load comments:", err);
+        } finally {
+            setIsLoading(false);
         }
     };
 
@@ -83,7 +118,7 @@ export default function Comments({ spotifyId, userId, track }: CommentProps) {
                     {comments.map((comment) => (
                         <div key={comment.id} className="bg-gray-800/50 p-2 rounded-md">
                             <div className="flex flex-col text-left break-words overflow-auto">
-                                <p className="text-xs text-purple-400 font-semibold break-words">{comment.users?.name.toUpperCase() || "Anon"}</p>
+                                <p className="text-xs text-purple-400 font-semibold break-words">{comment.users[0]?.name.toUpperCase() || "Anon"}</p>
                                 <p className="text-gray-200 text-sm mt-1 break-words overflow ">{comment.comment}</p>
                             </div>
                         </div>
@@ -110,6 +145,6 @@ export default function Comments({ spotifyId, userId, track }: CommentProps) {
         </div>
 
 
-    )
-        ;
+    );
+
 }

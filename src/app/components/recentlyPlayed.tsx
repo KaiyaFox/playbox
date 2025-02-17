@@ -1,3 +1,4 @@
+import Image from "next/image";
 
 interface RecentlyPlayedItem {
     track: {
@@ -32,7 +33,14 @@ export default function RecentlyPlayed({recentlyPlayed}: RecentlyPlayedProps) {
                     <li key={index} className="list-row">
                         <div className="text-4xl font-thin opacity-30 tabular-nums text-right">{index + 1}</div>
                         <div>
-                            <img className="size-20 rounded-box" src={item.track.album.images[0].url} alt="Album Art"/>
+                            <Image
+                                className="size-20 rounded-box"
+                                width={100}
+                                height={100}
+                                src={item.track.album.images[0].url}
+                                alt="Album Art"
+
+                            />
                         </div>
                         <div className="list-col-grow">
                             <div>{item.track.name}</div>
