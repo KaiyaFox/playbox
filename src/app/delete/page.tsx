@@ -51,7 +51,7 @@ const [isDeleted, setIsDeleted] = useState(false);
                     <p className="mb-4">Are you sure you want to delete your account? This action is irreversible and all of your data on PlayBox
                         including comments on songs will be deleted.</p>
                     <p>This WILL NOT affect your Spotify Account.</p>
-                    <button className="btn btn-red" onClick={handleDeleteAccount}>Delete PlayBox Account</button>
+                    <button className="btn bg-red-900" onClick={handleDeleteAccount}>Delete PlayBox Account</button>
                 </div>
             )}
         </div>
