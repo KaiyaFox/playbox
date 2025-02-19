@@ -135,6 +135,8 @@ export default function NowPlaying() {
                         <div className="flex flex-col lg:flex-row w-full gap-4">
                             {/* Left Most Played */}
                             <div className="flex-grow grid place-items-center p-4 text-left">
+                                <TopArtist/>
+
                                 <h1 className="text-4xl sm:text-5xl font-bold text-purple-400 mb-3 text-center">
                                     <Comments
                                         spotifySongId={trackData.trackId || ''}
@@ -152,9 +154,6 @@ export default function NowPlaying() {
                             <div className="flex-grow grid place-items-center">
 
                                 <div className="text-center">
-                                    <TopArtist/>
-                                    <p className="divider"/>
-
                                     <h1 className="text-4xl sm:text-5xl font-bold text-purple-400 mb-3">
                                     </h1>
 
