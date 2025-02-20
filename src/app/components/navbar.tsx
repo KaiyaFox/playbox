@@ -43,12 +43,18 @@ export default function Navbar() {
                             Now Playing
                         </button>
 
+                        <button className="btn btn-ghost" onClick={() => HandleClick("/my-account")}
+                        >
+                            My Profile
+                        </button>
+
                         <button
                             className="btn btn-ghost"
                             onClick={() => HandleClick("/about")}
                         >
                             About
                         </button>
+
 
 
                     </ul>
