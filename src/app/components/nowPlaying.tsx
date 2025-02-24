@@ -83,7 +83,7 @@ export default function NowPlaying() {
         fetchNowPlaying(); // Init
         const interval = setInterval(fetchNowPlaying, 15000); // Poll every 15 seconds
         return () => clearInterval(interval); // Cleanup
-    }, []);
+    }, [session]);
 
     // 🎨 Vanta Background Effect
     useEffect(() => {
