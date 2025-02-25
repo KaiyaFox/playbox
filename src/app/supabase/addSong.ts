@@ -60,3 +60,20 @@ export async function getCommentsForSong(songId: string) {
     return data;
 }
 
+export async function updateHandle(handle: string, userId: string | null | undefined) {
+    if (!handle) {
+        console.log('No handle provided. Database call skipped.');
+        return;
+    }
+    console.log('Changing handle to:', handle);
+    const { data, error } = await supabase
+        .from('users')
+        .update({ handle: handle })
+        .eq('email', userId);
+
+    if (error) {
+        console.error('Error changing handle:', error);
+    }
+    return data;
+}
+

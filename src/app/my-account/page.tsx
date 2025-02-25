@@ -1,35 +1,75 @@
 'use client';
 import Link from "next/link";
 import ProfileQR from "@/app/components/QrCode";
-import {useEffect, useState} from "react";
+import {useState} from "react";
+import {updateHandle} from "@/app/supabase/addSong";
+import { useSession } from "next-auth/react";
+
 
 export default function MyAccount() {
-    const [handle, setHandle] = useState("user123"); // Replace with actual handle from user data
+    const {data: session} = useSession();
+    const [handle, setHandle] = useState(""); // Replace with actual handle from user data
+    const [error, setError] = useState(""); // State to store error message
 
-    useEffect(() => {
-        // Simulate fetching handle from user data
-        const fetchHandle = async () => {
-            // Simulate fetching handle from user data
-            setHandle("exampleHandle"); // Replace with actual handle from user data
+    const validationInput = (value: string) => {
+        const regex = /^[a-zA-Z0-9_]+$/; // Regex to allow only alphanumeric characters and underscores
+        return regex.test(value)
+    }
+
+
+
+    const handleChange = (e: React.ChangeEvent<HTMLInputElement>) => {
+        const value = e.target.value;
+        if (validationInput(value)) {
+            setHandle(value);
+            setError(""); // Clear error message if input is valid
+        } else {
+            console.error(error);
+            setError("Invalid handle. Only alphanumeric characters and underscores are allowed.");
         }
-        fetchHandle();
-    }, [handle]); // Dependency array ensures the effect runs when handle changes
-    return (
-        <div className="container mx-auto">
-            <h1>My Account</h1>
-            <br>
-            </br>
-            <h2>Handle</h2>
-            <input type="text" placeholder={handle} className="input w-full max-w-xs" />
-            <br>
-            </br>
-            <Link href="/delete">
-                <button className={"btn bg-red-900"}>Delete Account</button>
-            </Link>
-            <Link href="/settings">Public Profile</Link>
-            <button className={"btn bg-blue-900"}>Save</button>
-            <ProfileQR />
-        </div>
-    );
+    };
+
+    const handleSave = async () => {
+        // Simulate saving handle
+        const userId = session?.user?.email;
+        try {
+            console.log(userId);
+            await updateHandle(handle, userId);
+        } catch (error) {
+            console.error("Error updating handle:", error);
+        }
+    }
+
+        return (
+            <div className="container mx-auto">
+                <h1>My Account</h1>
+                <br>
+                </br>
+                <h2>Handle</h2>
+                <input
+                    type="text"
+                    placeholder="Your handle"
+                    className="input w-full max-w-xs"
+                    value={handle}
+                    onChange={handleChange}
+                />
+                <br>
+                </br>
+                <h2>Showcase Playlist</h2>
+                <input
+                    type="text"
+                    placeholder="Your playlist"
+                    className="input w-full max-w-xs"
+                    onChange={handleChange}
+                />
+                <Link href="/delete">
+                    <button className={"btn bg-red-900"}>Delete Account</button>
+                </Link>
+                <Link href="/settings">Public Profile</Link>
+                <button className={"btn bg-blue-900"} onClick={handleSave}>Save</button>
+                <ProfileQR/>
+            </div>
+        );
 }
+
 
