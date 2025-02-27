@@ -4,12 +4,13 @@ import ProfileQR from "@/app/components/QrCode";
 import {useState} from "react";
 import {updateHandle} from "@/app/supabase/addSong";
 import { useSession } from "next-auth/react";
+import AlertMessage from "@/app/components/AlertMessage";
 
 
 export default function MyAccount() {
     const {data: session} = useSession();
     const [handle, setHandle] = useState(""); // Replace with actual handle from user data
-    const [error, setError] = useState(""); // State to store error message
+    const [inputError, setInputError] = useState(""); // State to store error message
 
     const validationInput = (value: string) => {
         const regex = /^[a-zA-Z0-9_]+$/; // Regex to allow only alphanumeric characters and underscores
@@ -22,10 +23,11 @@ export default function MyAccount() {
         const value = e.target.value;
         if (validationInput(value)) {
             setHandle(value);
-            setError(""); // Clear error message if input is valid
+            setInputError(""); // Clear error message if input is valid
         } else {
-            console.error(error);
-            setError("Invalid handle. Only alphanumeric characters and underscores are allowed.");
+            // console.error(error);
+            setInputError("Invalid handle. Only alphanumeric characters and underscores are allowed.");
+            console.log(inputError)
         }
     };
 
@@ -53,6 +55,8 @@ export default function MyAccount() {
                     value={handle}
                     onChange={handleChange}
                 />
+                {inputError && <AlertMessage message={inputError} />}
+
                 <br>
                 </br>
                 <h2>Showcase Playlist</h2>
