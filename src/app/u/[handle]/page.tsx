@@ -1,3 +1,4 @@
+// Public page for users profile.
 "use client";
 import { useEffect, useState } from "react";
 import { supabase } from "@/lib/supabaseClient";

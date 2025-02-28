@@ -22,6 +22,12 @@ declare module "next-auth" {
         expiresAt?: number;
         supabaseUserId?: string;
         error?: string;
+        user: {
+            spotifyId?: string;
+            name?: string;
+            email?: string;
+            image?: string;
+        };
     }
 }
 
@@ -33,6 +39,7 @@ declare module "next-auth/jwt" {
         expiresAt?: number;
         supabaseUserId: string;
         error?: string;
+        spotifyId?: string;
     }
 }
 
@@ -42,25 +49,26 @@ export const authOptions: NextAuthOptions = {
             clientId: process.env.SPOTIFY_CLIENT_ID!,
             clientSecret: process.env.SPOTIFY_CLIENT_SECRET!,
             authorization:
-                "https://accounts.spotify.com/authorize?scope=user-read-email,user-top-read,user-read-playback-state,user-read-recently-played",
+                "https://accounts.spotify.com/authorize?scope=user-read-email,user-top-read,user-read-playback-state,user-read-recently-played,playlist-read-private,playlist-read-collaborative",
         }),
     ],
     secret: process.env.NEXTAUTH_SECRET,
 
     callbacks: {
         async jwt({token, account, profile}) {
-            console.log("JWT Callback Triggered")
-            console.log("Token:", token);
-            console.log("Refresh token:", token?.refreshToken);
-            console.log("Account:", account);
-            console.log("Profile:", profile);
 
             if (account && profile) {
                 console.log("initial sign in detected.")
                 const spotifyProfile = profile as SpotifyProfile;
+
+
                 token.accessToken = account.access_token as string;
                 token.refreshToken = account.refresh_token;
                 token.expiresAt = account.expires_at ? account.expires_at * 1000 : undefined;
+                token.supabaseUserId = spotifyProfile.id;
+                token.spotifyId = spotifyProfile.id;
+                // Log the profile and token for debugging
+
 
 
                 console.log("Spotify Profile:", spotifyProfile);
@@ -89,6 +97,7 @@ export const authOptions: NextAuthOptions = {
                             email: spotifyProfile.email,
                             name: spotifyProfile.display_name,
                             image: spotifyProfile.images?.[0]?.url || "",
+                            spotify_id: spotifyProfile.id,
                         })
                         .select("id")
                         .single();
@@ -121,6 +130,7 @@ export const authOptions: NextAuthOptions = {
             session.refreshToken = token.refreshToken;
             session.expiresAt = token.expiresAt;
             session.error = token.error;
+            session.user.spotifyId = token.spotifyId;
             return session;
         }
 
