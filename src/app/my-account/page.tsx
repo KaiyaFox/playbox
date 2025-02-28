@@ -1,12 +1,13 @@
 'use client';
 import Link from "next/link";
-import ProfileQR from "@/app/components/QrCode";
+// import ProfileQR from "@/app/components/QrCode";
 import {useEffect, useState} from "react";
 import {updateHandle} from "@/app/supabase/addSong";
 import { useSession } from "next-auth/react";
 import {getUserPlaylists} from "@/lib/spotify";
 import AlertMessage from "@/app/components/AlertMessage";
 import {updatePlaylist} from "@/app/supabase/playlists";
+import {getUserData} from "@/app/supabase/userHelper";
 
 
 interface Playlist {
@@ -14,6 +15,7 @@ interface Playlist {
     name: string;
     // Add other properties as needed
 }
+
 
 export default function MyAccount() {
     const {data: session} = useSession();
@@ -32,13 +34,35 @@ export default function MyAccount() {
 
     useEffect(() => {
         if (!session) return;
+
+        // Fetch playlists
         getUserPlaylists(session?.user.spotifyId)
-            .then(data => setPlaylist(data.items))
-            .catch(error => console.error("Error fetching playlists:", error));
+            .then((data) => {
+                console.log("Playlists:", data.items);
+                setPlaylist(data.items);
+            })
+            .catch((error) => console.error("Error fetching playlists:", error));
 
-        // Get handle from db
+        // Fetch user data
+        getUserData(session?.user?.email ?? "")
+            .then((data) => {
+                console.log("User Data:", data);
 
-    } , [session])
+                // Check if data exists and has at least one element
+                if (data && data.length > 0) {
+                    setHandleFromDb(data[0].handle);
+                    setHandle(data[0].handle);
+                    setSelectedPlaylist(data[0].playlist);
+                } else {
+                    console.warn("No user data found for email:", session.user.email);
+                    // Optionally, set default values or show an error message
+                    setHandleFromDb("");
+                    setHandle("");
+                    setSelectedPlaylist("");
+                }
+            })
+            .catch((error) => console.error("Error fetching user data:", error));
+    }, [session]);
 
     const handleChange = (e: React.ChangeEvent<HTMLInputElement>) => {
         const value = e.target.value;
@@ -79,10 +103,10 @@ export default function MyAccount() {
 
             {/* Handle Section */}
             <div className="card bg-base-200 shadow-xl p-6 mb-8">
-                <h2 className="text-2xl font-semibold mb-4">Handle</h2>
+                <h2 className="text-2xl font-semibold mb-4">Handle - www.playbox.music/u/{handleFromDb}</h2>
                 <input
                     type="text"
-                    placeholder="Your handle"
+                    placeholder="{handle}"
                     className="input input-bordered w-full max-w-xs"
                     value={handle}
                     onChange={handleChange}

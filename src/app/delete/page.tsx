@@ -1,14 +1,13 @@
 "use client"
 // Delete and unlink Spotify from PlayBox
 import { useRouter } from 'next/navigation';
-import { signOut } from "next-auth/react";
-import {useState} from "react";
-
+import { signOut, useSession } from "next-auth/react";
+import { useState } from "react";
 
 export default function Delete() {
-const router = useRouter();
-const [isDeleted, setIsDeleted] = useState(false);
-    // Check if user is authenticated
+    const { data: session, status } = useSession();
+    const router = useRouter();
+    const [isDeleted, setIsDeleted] = useState(false);
 
     // Handle delete account request
     const handleDeleteAccount = async () => {
@@ -38,8 +37,23 @@ const [isDeleted, setIsDeleted] = useState(false);
         }
     };
 
+    if (status === 'loading') {
+        return <div>Loading...</div>;
+    }
+
+    if (!session) {
+        return (
+            <div className="flex items-center justify-center min-h-screen">
+                <div>
+                    <h1 className="text-3xl font-bold mb-4">Error</h1>
+                    <p>Not signed in</p>
+                </div>
+            </div>
+        );
+    }
+
     return (
-        <div className="flex items-center justify-center min-h-screen ">
+        <div className="flex items-center justify-center min-h-screen">
             {isDeleted ? (
                 <div>
                     <h1 className="text-3xl font-bold mb-4">Account Deleted</h1>
