@@ -21,6 +21,7 @@ export default function MyAccount() {
     const [inputError, setInputError] = useState(""); // State to store error message
     const [playlist, setPlaylist] = useState([]); // Replace with actual playlist from user data
     const [selectedPlaylist, setSelectedPlaylist] = useState(""); // State to store selected playlist
+    const [handleFromDb, setHandleFromDb] = useState(""); // State to store handle from database
 
     console.log("Session data:", session);
 
@@ -34,6 +35,9 @@ export default function MyAccount() {
         getUserPlaylists(session?.user.spotifyId)
             .then(data => setPlaylist(data.items))
             .catch(error => console.error("Error fetching playlists:", error));
+
+        // Get handle from db
+
     } , [session])
 
     const handleChange = (e: React.ChangeEvent<HTMLInputElement>) => {
@@ -65,50 +69,73 @@ export default function MyAccount() {
         setSelectedPlaylist(e.target.value);
     }
 
-        return (
-            session ? (
-                <div className="container mx-auto">
-                    <h1>My Account</h1>
-                    <br>
-                    </br>
-                    <h2>Handle</h2>
-                    <input
-                        type="text"
-                        placeholder="Your handle"
-                        className="input w-full max-w-xs"
-                        value={handle}
-                        onChange={handleChange}
-                    />
-                    {inputError && <AlertMessage message={inputError} />}
+    return session ? (
+        <div className="container mx-auto p-4 relative min-h-screen">
+            {/* Header Section */}
+            <div className="text-center mb-8">
+                <h1 className="text-4xl font-bold mb-2">Your PlayBox Account</h1>
+                <p className="text-xl text-gray-600">{session.user.name}</p>
+            </div>
 
-                    <br>
-                    </br>
-                    <h2>Showcase Playlist</h2>
-                    <br>
-                    </br>
-                    <select className="select select-bordered w-full max-w-xs" onChange={handlePlaylistChange}>
-                        <option disabled selected>Choose a playlist</option>
-                        {playlist.map((playlist: Playlist) => (
-                            <option
-                                key={playlist.id}
-                                value={playlist.id}>{playlist.name}</option>
-                        ))}
-                    </select>
+            {/* Handle Section */}
+            <div className="card bg-base-200 shadow-xl p-6 mb-8">
+                <h2 className="text-2xl font-semibold mb-4">Handle</h2>
+                <input
+                    type="text"
+                    placeholder="Your handle"
+                    className="input input-bordered w-full max-w-xs"
+                    value={handle}
+                    onChange={handleChange}
+                />
+                {inputError && <AlertMessage message={inputError} />}
+            </div>
 
-                    <Link href="/delete">
-                        <button className={"btn bg-red-900"}>Delete Account</button>
-                    </Link>
-                    <Link href="/settings">Public Profile</Link>
-                    <button className={"btn bg-blue-900"} onClick={handleSave}>Save</button>
-                    <ProfileQR/>
-                </div>
-            ) : (
-                <div className="container mx-auto text-2xl text-center">
-                    <h1>Please sign in to access your account.</h1>
-                </div>
-            )
+            {/* Playlist Section */}
+            <div className="card bg-base-200 shadow-xl p-6 mb-8">
+                <h2 className="text-2xl font-semibold mb-4">Showcased Playlist</h2>
+                <p className="italic">Select one of your playlists to showcase on your profile.</p>
+                <select
+                    className="select select-bordered w-full max-w-xs"
+                    onChange={handlePlaylistChange}
+                >
+                    <option disabled selected>
+                        Choose a playlist
+                    </option>
+                    {playlist.map((playlist: Playlist) => (
+                        <option key={playlist.id} value={playlist.id}>
+                            {playlist.name}
+                        </option>
+                    ))}
+                </select>
+            </div>
 
-        );
+            {/* Action Buttons */}
+            <div className="flex flex-col space-y-4 items-center">
+                <Link href="/u/[handle]" as={`/u/${handle}`}>
+                    <button className="btn btn-primary w-full max-w-xs">View Your Public Profile</button>
+                </Link>
+                <button className="btn btn-success w-full max-w-xs" onClick={handleSave}>
+                    Save
+                </button>
+            </div>
+
+            {/* Delete Button (Positioned Bottom-Right) */}
+            <div className="fixed bottom-4 right-4">
+                <Link href="/delete">
+                    <button className="btn btn-error">Delete Account</button>
+                </Link>
+            </div>
+
+            {/* QR Code Section */}
+            <div className="mt-8 text-center">
+                {/* Add QR Code component here if needed */}
+            </div>
+        </div>
+    ) : (
+        <div className="container mx-auto p-4 text-center">
+            <h1 className="text-4xl font-bold">Please sign in to access your account.</h1>
+        </div>
+    );
 }
 
 
