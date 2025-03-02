@@ -1,6 +1,6 @@
 'use client';
 import Link from "next/link";
-// import ProfileQR from "@/app/components/QrCode";
+import ProfileQR from "@/app/components/QrCode";
 import {useEffect, useState} from "react";
 import { useSession } from "next-auth/react";
 import {getUserPlaylists} from "@/lib/spotify";
@@ -130,7 +130,10 @@ export default function MyAccount() {
                     onChange={handleChange}
                 />
                 {inputError && <AlertMessage message={inputError} />}
+                <h2 className="text-2xl font-semibold mb-4">Qr Code</h2>
+                {userData.handle && <ProfileQR userHandle={userData.handle} />}
             </div>
+
 
             {/* Playlist Section */}
             <div className="card bg-base-200 shadow-xl p-6 mb-8">
