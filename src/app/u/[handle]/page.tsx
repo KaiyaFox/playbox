@@ -83,7 +83,15 @@ export default function Profile() {
                                     </div>
                                 </div>
                                 <h1 className="text-3xl font-bold mb-2">{user.name}</h1>
-                                <p className="text-gray-400">@{handle}</p>
+                                <p className="text-gray-400 mb-2">@{handle}</p>
+                                <div className="stats shadow mb-2">
+                                    <div className="stat">
+                                        <div className="stat-title">My vibe</div>
+                                        <div className="stat-value">
+                                            Trance
+                                        </div>
+                                    </div>
+                                </div>
 
                                 {/* Social Media Icons */}
                                 <div className="flex space-x-6 mt-4">

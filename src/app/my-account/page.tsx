@@ -2,11 +2,10 @@
 import Link from "next/link";
 // import ProfileQR from "@/app/components/QrCode";
 import {useEffect, useState} from "react";
-import {updateHandle} from "@/app/supabase/addSong";
 import { useSession } from "next-auth/react";
 import {getUserPlaylists} from "@/lib/spotify";
 import AlertMessage from "@/app/components/AlertMessage";
-import {updatePlaylist} from "@/app/supabase/playlists";
+import {updateUserProfile} from "@/app/supabase/userHelper";
 import {getUserData} from "@/app/supabase/userHelper";
 
 
@@ -19,11 +18,20 @@ interface Playlist {
 
 export default function MyAccount() {
     const {data: session} = useSession();
-    const [handle, setHandle] = useState(""); // Replace with actual handle from user data
+    // const [handle, setHandle] = useState(""); // Replace with actual handle from user data
     const [inputError, setInputError] = useState(""); // State to store error message
-    const [playlist, setPlaylist] = useState([]); // Replace with actual playlist from user data
-    const [selectedPlaylist, setSelectedPlaylist] = useState(""); // State to store selected playlist
-    const [handleFromDb, setHandleFromDb] = useState(""); // State to store handle from database
+    // const [playlist, setPlaylist] = useState([]); // Replace with actual playlist from user data
+    // const [selectedPlaylist, setSelectedPlaylist] = useState(""); // State to store selected playlist
+    // const [handleFromDb, setHandleFromDb] = useState(""); // State to store handle from database
+    // const [publicProfile, setPublicProfile] = useState(false); // State to store public profile status
+
+    const [userData, setUserData] = useState({
+        name: "",
+        handle: "",
+        playlist: [] as Playlist[],
+        selectedPlaylist: "",
+        publicProfile: false,
+    });
 
     console.log("Session data:", session);
 
@@ -39,7 +47,11 @@ export default function MyAccount() {
         getUserPlaylists(session?.user.spotifyId)
             .then((data) => {
                 console.log("Playlists:", data.items);
-                setPlaylist(data.items);
+                setUserData((prevData => ({
+                    ...prevData,
+                    playlist: data.items,
+                })
+                ));
             })
             .catch((error) => console.error("Error fetching playlists:", error));
 
@@ -50,15 +62,24 @@ export default function MyAccount() {
 
                 // Check if data exists and has at least one element
                 if (data && data.length > 0) {
-                    setHandleFromDb(data[0].handle);
-                    setHandle(data[0].handle);
-                    setSelectedPlaylist(data[0].playlist);
+                    setUserData({
+                        name: data[0].name,
+                        handle: data[0].handle,
+                        playlist: data[0].playlist,
+                        selectedPlaylist: data[0].playlist,
+                        publicProfile: data[0].public,
+                    });
+
                 } else {
                     console.warn("No user data found for email:", session.user.email);
                     // Optionally, set default values or show an error message
-                    setHandleFromDb("");
-                    setHandle("");
-                    setSelectedPlaylist("");
+                    setUserData({
+                        name: "",
+                        handle: "",
+                        playlist: [],
+                        selectedPlaylist: "",
+                        publicProfile: false,
+                    });
                 }
             })
             .catch((error) => console.error("Error fetching user data:", error));
@@ -66,32 +87,29 @@ export default function MyAccount() {
 
     const handleChange = (e: React.ChangeEvent<HTMLInputElement>) => {
         const value = e.target.value;
-        console.log(session);
         if (validationInput(value)) {
-            setHandle(value);
-            setInputError(""); // Clear error message if input is valid
+            setUserData((prevData) => ({ ...prevData, handle: value }));
         } else {
-            // console.error(error);
             setInputError("Invalid handle. Only alphanumeric characters and underscores are allowed.");
-            console.log(inputError)
         }
     };
 
     const handleSave = async () => {
-        // Simulate saving handle
         const userId = session?.user?.email;
         try {
-            console.log(userId);
-            await updateHandle(handle, userId);
-            await updatePlaylist(selectedPlaylist, userId);
+            await updateUserProfile(userId, userData.name, userData.handle, userData.selectedPlaylist, userData.publicProfile);
         } catch (error) {
-            console.error("Error updating handle:", error);
+            console.error("Error updating user profile:", error);
         }
-    }
+    };
 
     const handlePlaylistChange = (e: React.ChangeEvent<HTMLSelectElement>) => {
-        setSelectedPlaylist(e.target.value);
-    }
+        setUserData((prevData) => ({ ...prevData, selectedPlaylist: e.target.value }));
+    };
+
+    const handleVisibilityChange = () => {
+        setUserData((prevData) => ({ ...prevData, publicProfile: !prevData.publicProfile }));
+    };
 
     return session ? (
         <div className="container mx-auto p-4 relative min-h-screen">
@@ -103,12 +121,12 @@ export default function MyAccount() {
 
             {/* Handle Section */}
             <div className="card bg-base-200 shadow-xl p-6 mb-8">
-                <h2 className="text-2xl font-semibold mb-4">Handle - www.playbox.music/u/{handleFromDb}</h2>
+                <h2 className="text-2xl font-semibold mb-4">Handle - www.playbox.music/u/{userData.handle}</h2>
                 <input
                     type="text"
                     placeholder="{handle}"
                     className="input input-bordered w-full max-w-xs"
-                    value={handle}
+                    value={userData.handle}
                     onChange={handleChange}
                 />
                 {inputError && <AlertMessage message={inputError} />}
@@ -125,7 +143,7 @@ export default function MyAccount() {
                     <option disabled selected>
                         Choose a playlist
                     </option>
-                    {playlist.map((playlist: Playlist) => (
+                    {Array.isArray(userData.playlist) && userData.playlist.map((playlist: Playlist) => (
                         <option key={playlist.id} value={playlist.id}>
                             {playlist.name}
                         </option>
@@ -133,9 +151,19 @@ export default function MyAccount() {
                 </select>
             </div>
 
+            {/* Profile Section */}
+            <div className="card bg-base-200 shadow-xl p-6 mb-8">
+                <h2 className="text-2xl font-semibold mb-4">Profile</h2>
+                <p className="italic">Enable Profile Visibility</p>
+                <label className="flex items-center space-x-3">
+                    <span>Visibility</span>
+                    <input type="checkbox" className="toggle toggle-primary" checked={userData.publicProfile} onChange={handleVisibilityChange} />
+                </label>
+            </div>
+
             {/* Action Buttons */}
             <div className="flex flex-col space-y-4 items-center">
-                <Link href="/u/[handle]" as={`/u/${handle}`}>
+                <Link href="/u/[handle]" as={`/u/${userData.handle}`}>
                     <button className="btn btn-primary w-full max-w-xs">View Your Public Profile</button>
                 </Link>
                 <button className="btn btn-success w-full max-w-xs" onClick={handleSave}>
@@ -157,7 +185,7 @@ export default function MyAccount() {
         </div>
     ) : (
         <div className="container mx-auto p-4 text-center">
-            <h1 className="text-4xl font-bold">Please sign in to access your account.</h1>
+            <h1 className="text-4xl font-bold">Sign in to access your account.</h1>
         </div>
     );
 }
