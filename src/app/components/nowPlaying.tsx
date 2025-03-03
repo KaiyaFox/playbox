@@ -212,6 +212,7 @@ export default function NowPlaying() {
                     <p className="text-lg sm:text-2xl text-gray-300 mt-2">
                     Connect your Spotify account to get started.
                     </p>
+                        <p className="italic">Closed Beta</p>
                     <div className="mt-4">
                     <AuthButton />
                     </div>

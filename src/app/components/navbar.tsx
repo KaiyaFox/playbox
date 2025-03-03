@@ -67,6 +67,7 @@ export default function Navbar() {
                 >
                     PlayBox
                 </button>
+                <p className="italic">Beta</p>
             </div>
             <div className="navbar-end">
                 <AuthButton />
