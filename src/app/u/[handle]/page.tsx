@@ -5,14 +5,6 @@ import { supabase } from "@/lib/supabaseClient";
 import { useParams } from "next/navigation";
 import Image from "next/image";
 import PlayList from "@/app/components/PlayList";
-import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
-import {
-    faFacebook,
-    faInstagram,
-    faTiktok,
-    faYoutube,
-    faBluesky,
-} from "@fortawesome/free-brands-svg-icons";
 import UsersTopArtist from "@/app/components/PublicProfile/UsersTop";
 
 
@@ -123,23 +115,6 @@ export default function Profile() {
                                 )}
 
                                 {/* Social Media Icons */}
-                                {/*<div className="flex space-x-6 mt-4">*/}
-                                {/*    <a href="#" className="hover:text-blue-400">*/}
-                                {/*        <FontAwesomeIcon icon={faBluesky} size="2x" />*/}
-                                {/*    </a>*/}
-                                {/*    <a href="#" className="hover:text-pink-500">*/}
-                                {/*        <FontAwesomeIcon icon={faTiktok} size="2x" />*/}
-                                {/*    </a>*/}
-                                {/*    <a href="#" className="hover:text-red-600">*/}
-                                {/*        <FontAwesomeIcon icon={faYoutube} size="2x" />*/}
-                                {/*    </a>*/}
-                                {/*    <a href="#" className="hover:text-blue-600">*/}
-                                {/*        <FontAwesomeIcon icon={faFacebook} size="2x" />*/}
-                                {/*    </a>*/}
-                                {/*    <a href="#" className="hover:text-purple-500">*/}
-                                {/*        <FontAwesomeIcon icon={faInstagram} size="2x" />*/}
-                                {/*    </a>*/}
-                                {/*</div>*/}
                             </div>
 
                             {/* Playlist Section */}
