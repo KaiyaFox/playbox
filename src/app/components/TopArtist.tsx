@@ -26,6 +26,9 @@ export default function TopArtist() {
                     topAffinity: data.artist.name,
                     affinityImage: data.artist.images[0].url
                 })
+
+
+
             } catch (error) {
                 console.error("Error fetching user stats:", error);
             }

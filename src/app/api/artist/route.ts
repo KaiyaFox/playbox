@@ -38,7 +38,7 @@ export async function GET(req: NextRequest) {
             artist: data.name,
             genre: data.genres,
             popularity: data.popularity,
-            followers: data.followers.total,
+            // followers: data.followers.total,
         };
 
         return NextResponse.json(artist);

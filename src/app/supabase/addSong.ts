@@ -76,4 +76,25 @@ export async function updateHandle(handle: string, userId: string | null | undef
     }
     return data;
 }
+// Gets the top artist from the user table. This is called when the user logs in to get their top artist.
+export async function getTopArtist(handle: string) {
+    //const session = await getServerSession(authOptions)
+    // Gets the top_artist from the user table
+    const {data, error} = await supabase
+        .from('users')
+        .select('top_artist')
+        .eq('handle', handle)
+        .single();
+    if(error) {
+        console.error('Error fetching top artist:', error);
+        return null;
+    } else {
+        return data.top_artist;
+    }
+}
+
+
+
+
+
 

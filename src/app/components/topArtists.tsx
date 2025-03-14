@@ -8,7 +8,7 @@ export default function TopArtists() {
         fetch("/api/topArtists")
             .then((response) => response.json())
             .then((data) => {
-                console.log(data);
+                console.log("Top Art: ", data);
             });
     }, []);
 

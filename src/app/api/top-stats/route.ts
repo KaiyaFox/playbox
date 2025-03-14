@@ -1,8 +1,10 @@
 import { NextResponse } from "next/server";
 import { getServerSession } from "next-auth";
 import { authOptions } from "@/lib/authOptions";
+import { supabase } from "@/lib/supabaseClient";
 
 export async function GET() {
+
     try {
         console.log("Getting user's top stats");
         const session = await getServerSession(authOptions);
@@ -32,12 +34,26 @@ export async function GET() {
 
         const data = await response.json();
 
-        if (!data.items || data.items.length === 0) {
+        if(!data.items || data.items === 0) {
             return NextResponse.json({ error: "No top artists found" }, { status: 404 });
         }
 
-        const artist = data.items[0];
-        // console.log("Top Artist:", artist);
+        const artist = data.items[0]
+
+        // Write top artist to supabase
+        const { error } = await supabase
+            .from('users')
+            .update({ top_artist: artist })
+            .eq('email', session.user?.email);
+        if (error) {
+            console.error('Error updating top artist:', error);
+            return NextResponse.json({ error: "Failed to update top artist" }, { status: 500 });
+        }
+
+
+        if (!data.items || data.items.length === 0) {
+            return NextResponse.json({ error: "No top artists found" }, { status: 404 });
+        }
 
         return NextResponse.json({ artist });
 

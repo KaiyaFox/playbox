@@ -1,4 +1,5 @@
 "use client";
+import { getTopArtist } from "@/app/supabase/addSong";
 import { useEffect, useState } from "react";
 import { supabase } from "@/lib/supabaseClient";
 import { useParams } from "next/navigation";
@@ -12,6 +13,8 @@ import {
     faYoutube,
     faBluesky,
 } from "@fortawesome/free-brands-svg-icons";
+import UsersTopArtist from "@/app/components/PublicProfile/UsersTop";
+
 
 interface User {
     name: string;
@@ -20,14 +23,32 @@ interface User {
     playlist: string;
 }
 
+interface TopArtist {
+    id: string;
+    name: string;
+    uri?: string;
+    genres?: string[];
+    followers?: string;
+    images: { url: string}[];
+    popularity?: string;
+    external_urls?: { spotify: string; }
+}
+
 export default function Profile() {
+
     const params = useParams();
-    const handle = params?.handle; // Extracting handle from params
+    let handle = params?.handle;
+
+    if (Array.isArray(handle)) {
+        handle = handle[0]
+    }
+
     const [user, setUser] = useState<User | null>(null); // State to store user data
     const [isPublic, setIsPublic] = useState<boolean | null>(null);
     const [image, setImage] = useState("");
     const [playlist, setPlaylist] = useState("");
     const [noData, setNoData] = useState(false);
+    const [usersTopArtist, setUsersTopArtist] = useState<TopArtist | null>(null); // State to store top artist data
 
     useEffect(() => {
         if (!handle) return; // Prevent execution if handle is undefined
@@ -41,6 +62,12 @@ export default function Profile() {
                     .single();
 
                 console.log("data: ", data);
+                const usersTopArtist = await getTopArtist(handle); // Fetch top artist data
+                setUsersTopArtist(usersTopArtist)
+                console.log("Top Artist:", usersTopArtist);
+
+
+
 
                 if (error && error.code === "PGRST116") {
                     console.log(`No user with handle ${handle} was found`, error);
@@ -84,14 +111,16 @@ export default function Profile() {
                                 </div>
                                 <h1 className="text-3xl font-bold mb-2">{user.name}</h1>
                                 <p className="text-gray-400 mb-2">@{handle}</p>
-                                <div className="stats shadow mb-2">
-                                    <div className="stat">
-                                        <div className="stat-title">My vibe</div>
-                                        <div className="stat-value">
-                                            Trance
-                                        </div>
-                                    </div>
-                                </div>
+                                {usersTopArtist && (
+                                    <UsersTopArtist
+                                        id={usersTopArtist.id}
+                                        name={usersTopArtist.name}
+                                        images={usersTopArtist.images[0].url}
+                                        genres={usersTopArtist.genres}
+                                    >
+
+                                    </UsersTopArtist>
+                                )}
 
                                 {/* Social Media Icons */}
                                 <div className="flex space-x-6 mt-4">
