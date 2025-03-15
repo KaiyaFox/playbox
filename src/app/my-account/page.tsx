@@ -36,6 +36,7 @@ export default function MyAccount() {
     console.log("Session data:", session);
 
     const validationInput = (value: string) => {
+        if (value === "") return true
         const regex = /^[a-zA-Z0-9_]+$/; // Regex to allow only alphanumeric characters and underscores
         return regex.test(value)
     }
@@ -124,7 +125,7 @@ export default function MyAccount() {
                 <h2 className="text-2xl font-semibold mb-4">Handle - www.playbox.music/u/{userData.handle}</h2>
                 <input
                     type="text"
-                    placeholder="{handle}"
+                    placeholder="enter a custom handle"
                     className="input input-bordered w-full max-w-xs"
                     value={userData.handle}
                     onChange={handleChange}
