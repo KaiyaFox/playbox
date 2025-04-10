@@ -1,6 +1,8 @@
 import { NextResponse} from "next/server";
 import { getServerSession} from "next-auth";
 import { authOptions } from "@/lib/authOptions";
+//import { updateRecentlyPlayed } from "@/app/supabase/updateRecentlyPlayed";
+import { SpotifyRecentlyPlayedResponse } from "@/types/types";
 
 interface Artist {
     name: string
@@ -28,23 +30,29 @@ export async function GET() {
 
         // console.log("From spotify", response)
 
+        // TODO: Handle if response is not 200. Why am i checking for 204?
         if (response.status === 204 || response.status > 400) {
             return NextResponse.json({playing: false});
         }
 
-        const data = await response.json();
+        const data: SpotifyRecentlyPlayedResponse = await response.json();
         // console.log(data)
 
-        const track = {
-            trackId: data.item.id,
-            track: data.item.name,
-            popular: data.item.popularity,
-            artist: data.item.artists.map((artist: Artist) => artist.name).join(", "),
-            albumArt: data.item.album.images[0].url,
-            genre: data.item.genre,
-            isPlaying: data.is_playing,
-        }
-        return NextResponse.json(track);
+        const tracks = data.items.map(({ track })=> ({
+            id: track.id,
+            name: track.name,
+            popularity: track.popularity,
+            artists: track.artists.map((artist: Artist) => artist.name),
+            albumArt: track.album.images[0].url,
+            genre: track.genre,
+            isPlaying: track.isPlaying,
+            external_urls: track.external_urls?.spotify,
+        }))
+
+        // Update recently played in supabase
+        //await updateRecentlyPlayed(track, session.user.email);
+
+        return NextResponse.json(tracks);
     } catch (error) {
         console.error("Error fetching Spotify data:", error);
         return NextResponse.json({ error: "Failed to fetch now playing track" }, { status: 500 });
