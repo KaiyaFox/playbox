@@ -6,7 +6,6 @@ export default function PlayList({ playlistId }: PlayListProps) {
     return (
         <>
         <div className="container mx-auto">
-            <h1>Featured Playlist</h1>
         </div>
         <iframe
             className="mx-auto"
@@ -16,7 +15,6 @@ export default function PlayList({ playlistId }: PlayListProps) {
             allow="autoplay; clipboard-write; encrypted-media; fullscreen; picture-in-picture"
             loading="lazy"
             style={{ background: 'transparent' }}
-
         >
         </iframe>
         </>

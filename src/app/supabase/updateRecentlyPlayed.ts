@@ -1,19 +1,21 @@
-// Updates user's recently played songs in Supabase
 import { supabase } from "@/lib/supabaseClient";
+import { SpotifyTrack } from "@/types/types";
 
-export async function updateRecentlyPlayed(recentlyPlayed: string[], userId: string | null | undefined) {
-    if (!recentlyPlayed) {
-        console.log('No recently played provided. Database call skipped.');
-        return;
-    }
-    console.log('Changing recently played to:', recentlyPlayed);
-    const { data, error } = await supabase
-        .from('users')
-        .update({ recently_played: recentlyPlayed })
-        .eq('email', userId);
+export async function updateRecentlyPlayed(tracks: SpotifyTrack[], email: string) {
+    try {
+        const { data, error } = await supabase
+            .from("users")
+            .update({ recently_played: { items: tracks } }) // matches RecentlyPlayedTracks type
+            .eq("email", email);
 
-    if (error) {
-        console.error('Error changing recently played:', error);
+        if (error) {
+            console.error("Error updating recently played tracks:", error);
+            throw error;
+        }
+
+        return data;
+    } catch (error) {
+        console.error("Error updating recently played tracks:", error);
+        throw error;
     }
-    return data;
 }

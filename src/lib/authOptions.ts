@@ -74,6 +74,7 @@ export const authOptions: NextAuthOptions = {
                 console.log("Spotify Profile:", spotifyProfile);
                 console.log("Refresh:", token.refreshToken);
                 console.log("Expires at:", token.expiresAt);
+                console.log("Token:", token);
 
                 if (!token.refreshToken) {
                     console.warn("No refresh token received during initial sign in.")

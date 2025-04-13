@@ -123,6 +123,29 @@ export default function NowPlaying() {
         loadScripts();
     }, []);
 
+
+    // For now we useeffect to call the api to sync the recently played that will save to supabase
+    useEffect(() => {
+        const syncRecentlyPlayed = async () => {
+            try {
+                const res = await fetch("/api/recently-played");
+                if (!res.ok) {
+                    const error = await res.json();
+                    console.error("Failed to sync recently played:", error);
+                } else {
+                    console.log("Recently played data synced successfully.");
+                }
+            } catch (err) {
+                console.error("Error syncing recently played data:", err);
+            }
+        };
+
+        if (session) {
+            syncRecentlyPlayed();
+        }
+    }, [session]);
+
+
     return (
         <>
             {/* Background */}

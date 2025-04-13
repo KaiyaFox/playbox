@@ -20,3 +20,27 @@ export interface Recent {
 export interface SpotifyRecentlyPlayedResponse {
     items: {track: SpotifyTrack}[];
 }
+
+
+export interface SpotifyUser {
+    name: string;
+    id: string;
+    image: string;
+    public: boolean;
+    playlist: string;
+    recently_played: RecentlyPlayedTracks;
+}
+
+export interface PlayBoxUser {
+    name: string;
+    id: string;
+    spotify_id: string;
+    handle: string;
+    top_artist: string;
+    email: string;
+    image: string;
+    public: boolean;
+    playlist: string;
+    recently_played: RecentlyPlayedTracks;
+    comments: string[];
+}

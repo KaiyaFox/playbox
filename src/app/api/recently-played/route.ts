@@ -1,17 +1,14 @@
 import { NextResponse} from "next/server";
 import { getServerSession} from "next-auth";
 import { authOptions } from "@/lib/authOptions";
-//import { updateRecentlyPlayed } from "@/app/supabase/updateRecentlyPlayed";
-import { SpotifyRecentlyPlayedResponse } from "@/types/types";
+import { updateRecentlyPlayed } from "@/app/supabase/updateRecentlyPlayed";
+import {SpotifyRecentlyPlayedResponse, SpotifyTrack} from "@/types/types";
 
-interface Artist {
-    name: string
-}
 
 export async function GET() {
 
     try {
-        console.log("Calling spotify")
+        console.log("Calling spotify!!")
         const session = await getServerSession(authOptions)
 
         if (!session) {
@@ -22,7 +19,7 @@ export async function GET() {
         // console.log(accessToken)
 
         // Fetch
-        const response = await fetch(`https://api.spotify.com/v1/me/player/recently-played?limit=10`, {
+        const response = await fetch(`https://api.spotify.com/v1/me/player/recently-played?limit=12`, {
             headers: {
                 Authorization: `Bearer ${accessToken}`,
             },
@@ -36,23 +33,21 @@ export async function GET() {
         }
 
         const data: SpotifyRecentlyPlayedResponse = await response.json();
-        // console.log(data)
+        console.log("SPOTIFYRECENTPLAYED", data)
 
-        const tracks = data.items.map(({ track })=> ({
+        const tracks: SpotifyTrack[] = data.items.map(({ track })=> ({
             id: track.id,
             name: track.name,
             popularity: track.popularity,
-            artists: track.artists.map((artist: Artist) => artist.name),
-            albumArt: track.album.images[0].url,
-            genre: track.genre,
-            isPlaying: track.isPlaying,
-            external_urls: track.external_urls?.spotify,
+            artists: track.artists,
+            album: track.album,
+            external_urls: track.external_urls,
         }))
 
         // Update recently played in supabase
-        //await updateRecentlyPlayed(track, session.user.email);
+        await updateRecentlyPlayed(tracks, session.user.email || session.user.email!);
 
-        return NextResponse.json(tracks);
+        return NextResponse.json({tracks});
     } catch (error) {
         console.error("Error fetching Spotify data:", error);
         return NextResponse.json({ error: "Failed to fetch now playing track" }, { status: 500 });

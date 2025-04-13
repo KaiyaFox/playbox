@@ -7,7 +7,7 @@ import Image from "next/image";
 import PlayList from "@/app/components/PlayList";
 import UsersTopArtist from "@/app/components/PublicProfile/UsersTop";
 import RecentlyPlayed from "@/app/components/PublicProfile/RecentlyPlayed";
-import {RecentlyPlayedTracks} from "@/types/types";
+import {SpotifyTrack} from "@/types/types";
 
 
 interface User {
@@ -40,8 +40,8 @@ export default function Profile() {
     const [user, setUser] = useState<User | null>(null); // State to store user data
     const [isPublic, setIsPublic] = useState<boolean | null>(null);
     const [image, setImage] = useState("");
-    const [playlist, setPlaylist] = useState("");
-    const [recentlyPlayed, setRecentlyPlayed] = useState<RecentlyPlayedTracks | null>(null);
+    const [playlistId, setPlaylistId] = useState("");
+    const [recentlyPlayed, setRecentlyPlayed] = useState<SpotifyTrack[] | null>(null);
     const [noData, setNoData] = useState(false);
     const [usersTopArtist, setUsersTopArtist] = useState<TopArtist | null>(null); // State to store top artist data
 
@@ -71,7 +71,7 @@ export default function Profile() {
                     setUser(data); // Save user data
                     setIsPublic(data.public); // Save public status
                     setImage(data.image); // Save image
-                    setPlaylist(data.playlist); // Save playlist
+                    setPlaylistId(data.playlist); // Save playlist
                     setRecentlyPlayed(data.recently_played); // Save recently played
                 }
             } catch (err) {
@@ -80,6 +80,7 @@ export default function Profile() {
         };
 
         fetchUser();
+
     }, [handle]);
 
     return (
@@ -121,16 +122,16 @@ export default function Profile() {
                                 {/* Social Media Icons */}
                             </div>
 
-                            {/* Playlist Section */}
-                            <div className="bg-gray-800 rounded-lg shadow-lg p-6">
-                                <h2 className="text-2xl font-bold mb-4">Showcased Playlist</h2>
-                                <PlayList playlistId={playlist} />
-                            </div>
-
                             {/* Recently Played Section */}
                             <div className="bg-gray-800 rounded-lg shadow-lg p-6 mt-8">
-                                <h2 className="text-2xl font-bold mb-4">Recently Played</h2>
-                                <RecentlyPlayed track={recentlyPlayed?.track || []}/>
+                                <h2 className="text-2xl font-bold mb-4">🎧 Recent Vibes</h2>
+                                <RecentlyPlayed items={recentlyPlayed}></RecentlyPlayed>
+                            </div>
+
+                            {/* Playlist Section */}
+                            <div className="bg-gray-800 rounded-lg shadow-lg p-6 mt-8">
+                                <h2 className="text-2xl font-bold mb-4">📋 Showcased Playlist</h2>
+                                <PlayList playlistId={playlistId} />
                             </div>
                         </>
                     ) : (
