@@ -55,44 +55,27 @@ export const authOptions: NextAuthOptions = {
     secret: process.env.NEXTAUTH_SECRET,
 
     callbacks: {
-        async jwt({token, account, profile}) {
-
+        async jwt({ token, account, profile }) {
+            // 1️⃣ On first login (account exists), setup the token
             if (account && profile) {
-                console.log("initial sign in detected.")
+                console.log("Initial sign-in detected.");
                 const spotifyProfile = profile as SpotifyProfile;
-
 
                 token.accessToken = account.access_token as string;
                 token.refreshToken = account.refresh_token;
-                token.expiresAt = account.expires_at ? account.expires_at * 1000 : undefined;
+                token.expiresAt = account.expires_at ? account.expires_at * 1000 : Date.now() + 3600 * 1000;
                 token.supabaseUserId = spotifyProfile.id;
                 token.spotifyId = spotifyProfile.id;
-                // Log the profile and token for debugging
 
-
-
-                console.log("Spotify Profile:", spotifyProfile);
-                console.log("Refresh:", token.refreshToken);
-                console.log("Expires at:", token.expiresAt);
-                console.log("Token:", token);
-
-                if (!token.refreshToken) {
-                    console.warn("No refresh token received during initial sign in.")
-                    return token;
-                }
-
-
-
-                // Check for email in Supabase
-                const {data: existingUser} = await supabase
+                // Optional: Supabase user creation logic
+                const { data: existingUser } = await supabase
                     .from("users")
                     .select("email")
                     .eq("email", spotifyProfile.email)
                     .single();
 
                 if (!existingUser) {
-                    // WHen creating a new user, we are generating a UUID on the database level.
-                    const {data, error: insertError} = await supabase
+                    const { data, error: insertError } = await supabase
                         .from("users")
                         .insert({
                             email: spotifyProfile.email,
@@ -108,24 +91,20 @@ export const authOptions: NextAuthOptions = {
                     } else {
                         token.supabaseUserId = data.id;
                     }
-                } else {
-                    token.supabaseUserId = spotifyProfile.id;
-                }
-                // Handle expired tokens
-                if (Date.now() < (token.expiresAt || 0)) {
-                    return token;
                 }
 
-                console.log("Current time:", Date.now());
-                console.log("Token expires at:", token.expiresAt);
-                if (Date.now() >= (token.expiresAt || 0)) {
-                    console.log("Token expired. Attempting to refresh...");
-                    return refreshAccessToken(token);
-                }
+                return token; // ✅ Exit early — no refresh needed yet
             }
-            return token;
+
+            // 2️⃣ On every other request, check if token is expired
+            if (Date.now() >= (token.expiresAt ?? 0)) {
+                console.log("Access token expired, refreshing...");
+                return await refreshAccessToken(token);
+            }
+
+            return token; // 3️⃣ Token is still valid
         },
-        // Add the user to the session
+
         async session({ session, token }) {
             session.accessToken = token.accessToken;
             session.refreshToken = token.refreshToken;
@@ -133,9 +112,7 @@ export const authOptions: NextAuthOptions = {
             session.error = token.error;
             session.user.spotifyId = token.spotifyId;
             return session;
-        }
-
-
+        },
     },
 }
 

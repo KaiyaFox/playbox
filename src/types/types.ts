@@ -1,3 +1,4 @@
+
 export interface RecentlyPlayedTracks {
     track: SpotifyTrack[];
 }
@@ -44,3 +45,10 @@ export interface PlayBoxUser {
     recently_played: RecentlyPlayedTracks;
     comments: string[];
 }
+
+// interface SpotifyProfile extends Profile {
+//     id: string;
+//     email: string;
+//     display_name: string;
+//     images: { url: string }[];
+// }
