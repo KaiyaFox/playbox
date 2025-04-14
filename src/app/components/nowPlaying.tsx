@@ -133,7 +133,7 @@ export default function NowPlaying() {
                     const error = await res.json();
                     console.error("Failed to sync recently played:", error);
                 } else {
-                    console.log("Recently played data synced successfully.");
+                    console.log("Recently played data synced successfully.", res);
                 }
             } catch (err) {
                 console.error("Error syncing recently played data:", err);

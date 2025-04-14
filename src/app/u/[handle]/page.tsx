@@ -125,7 +125,7 @@ export default function Profile() {
                             {/* Recently Played Section */}
                             <div className="bg-gray-800 rounded-lg shadow-lg p-6 mt-8">
                                 <h2 className="text-2xl font-bold mb-4">🎧 Recent Vibes</h2>
-                                <RecentlyPlayed items={recentlyPlayed || { items: [] }} />
+                                <RecentlyPlayed items={recentlyPlayed || []} />
                             </div>
 
                             {/* Playlist Section */}

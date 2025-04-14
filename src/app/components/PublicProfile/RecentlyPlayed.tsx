@@ -2,8 +2,8 @@ import Image from "next/image";
 import { SpotifyTrack } from "@/types/types";
 
 // Shows the recently played tracks of the user
-export default function RecentlyPlayed({ items }: { items: { items: SpotifyTrack[] } }) {
-    const tracks = items.items;
+export default function RecentlyPlayed({ items }: { items: SpotifyTrack[] }) {
+    const tracks = items;
     console.log(tracks);
     if (!Array.isArray(tracks) || tracks.length === 0) {
         return <div className="stats shadow">Nothing yet...</div>;

@@ -16,10 +16,10 @@ export interface SpotifyTrack {
 export interface Recent {
     tracks: SpotifyTrack[];
 }
-// Use this interface to get the recently played tracks from Spotify. It adds the track property to the items array
-export interface SpotifyRecentlyPlayedResponse {
-    items: {track: SpotifyTrack}[];
-}
+// // Use this interface to get the recently played tracks from Spotify. It adds the track property to the items array
+// export interface SpotifyRecentlyPlayedResponse {
+//     items: {track: SpotifyTrack}[];
+// }
 
 
 export interface SpotifyUser {

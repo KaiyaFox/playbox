@@ -5,7 +5,7 @@ export async function updateRecentlyPlayed(tracks: SpotifyTrack[], email: string
     try {
         const { data, error } = await supabase
             .from("users")
-            .update({ recently_played: { items: tracks } }) // matches RecentlyPlayedTracks type
+            .update({ recently_played: tracks  }) // matches RecentlyPlayedTracks type
             .eq("email", email);
 
         if (error) {
