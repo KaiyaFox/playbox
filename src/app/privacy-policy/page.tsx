@@ -20,7 +20,7 @@ export default function PrivacyPolicyPage() {
                             <li>Your Spotify user ID and display name</li>
                             <li>Your email address (for account management)</li>
                             <li>Your recently played tracks and top artists</li>
-                            <li>What you're currently listening to</li>
+                            <li>What you&#39;re currently listening to</li>
                         </ul>
                         We do not link individual tracks to specific users. No third-party tracking or marketing tools are used.
                     </p>
