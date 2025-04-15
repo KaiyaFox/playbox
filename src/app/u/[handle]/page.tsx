@@ -88,7 +88,13 @@ export default function Profile() {
             <div className="container mx-auto p-4">
                 {noData ? (
                     <div className="flex flex-col items-center justify-center h-screen">
-                        <p className="text-2xl text-red-500">🙀 User {handle} not found</p>
+                        <p className="text-4xl ">🙀 User {handle} not found</p>
+                        <button
+                            className="text-2xl text-gray-400 hover:underline focus:outline-none"
+                            onClick={() => window.history.back()}
+                        >
+                            Go Back
+                        </button>
                     </div>
                 ) : user ? (
                     isPublic ? (
