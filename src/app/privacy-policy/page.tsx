@@ -45,12 +45,6 @@ export default function PrivacyPolicyPage() {
                             Spotify Apps Dashboard
                         </a>. When disconnected, we will automatically remove your Spotify-related data.
                     </p>
-
-                    <h2 className="font-semibold mt-4 mb-2 text-sm">Questions?</h2>
-                    <p className="mb-2 text-sm">
-                        For any questions or concerns about your data, contact us at: <br />
-                        <a href="mailto:support@playbox.app" className="text-blue-400 hover:underline">support@playbox.app</a>
-                    </p>
                 </div>
             </div>
         </>

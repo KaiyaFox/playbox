@@ -6,6 +6,7 @@ import { getServerSession } from "next-auth";
 import authOptions from "@/lib/authOptions";
 import SessionWrapper from "@/app/components/SessionWrapper"; // Import the wrapper
 import { Session } from "next-auth";
+import Footer from "@/app/components/Footer";
 
 const geistSans = Geist({
     variable: "--font-geist-sans",
@@ -26,6 +27,7 @@ export default async function RootLayout({ children }: { children: ReactNode }) 
         <SessionWrapper session={session as Session}>
             <Navbar />
             {children}
+            <Footer />
         </SessionWrapper>
         </body>
         </html>

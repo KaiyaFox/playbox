@@ -142,7 +142,7 @@ export default function Profile() {
                         </>
                     ) : (
                         <div className="flex flex-col items-center justify-center h-screen">
-                            <p className="text-2xl text-gray-400">Profile is private 😶‍🌫️</p>
+                            <p className="text-4xl text-gray-400">Profile is private 😶‍🌫️</p>
                         </div>
                     )
                 ) : (
