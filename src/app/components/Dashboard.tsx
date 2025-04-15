@@ -42,7 +42,7 @@ interface TrackData {
 
 
 
-export default function NowPlaying() {
+export default function Dashboard() {
     const { data: session } = useSession();
     const [trackData,setTrackData] = useState<TrackData | null>(null);
     const [] = useState<Comment[]>([]);
@@ -168,16 +168,6 @@ export default function NowPlaying() {
                             <div className="bg-base-200 rounded-lg p-6 shadow-lg text-center">
                                 {trackData ? (
                                     <>
-                                        <h1 className="text-3xl sm:text-4xl font-bold text-purple-400 mb-3">
-                                            {trackData.track}
-                                        </h1>
-                                        <p className="text-xl sm:text-2xl text-white font-semibold">
-                                            {trackData.isPlaying ? "🔊 Now Playing" : "Spotify Paused. Play something on Spotify."}
-                                        </p>
-                                        <p className="text-lg text-gray-400">{trackData.artist}</p>
-                                        <p className="text-md text-gray-500">{trackData.genre}</p>
-                                        <Popularity popularity={trackData.popularity} />
-
                                         {trackData.albumArt && (
                                             <div className="mt-4">
                                                 <Image
@@ -188,7 +178,18 @@ export default function NowPlaying() {
                                                     className="rounded-3xl shadow-xl opacity-90 mx-auto"
                                                 />
                                             </div>
+
                                         )}
+                                        <h1 className="text-3xl sm:text-4xl font-bold text-purple-400 mb-3 mt-3">
+                                            {trackData.track}
+                                            <p className="text-lg text-gray-400">{trackData.artist}</p>
+
+                                        </h1>
+                                        <Popularity popularity={trackData.popularity} />
+                                        <p className="text-xl sm:text-2xl text-white font-semibold">
+                                            {trackData.isPlaying ? "🔊" : "Spotify Paused. Play something on Spotify."}
+                                        </p>
+
 
                                         <div className="mt-4">
                                             <Artist artistId={trackData.artistId || ''} />

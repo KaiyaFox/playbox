@@ -1,5 +1,5 @@
 
-import NowPlaying from "../app/components/nowPlaying";
+import Dashboard from "./components/Dashboard";
 import Navbar from "@/app/components/navbar";
 
 export const metadata = {
@@ -13,7 +13,7 @@ export default async function Home() {
 
                 <Navbar/>
                 <div>
-                  <NowPlaying/>
+                  <Dashboard/>
                     <div className="flex-grow">
                     </div>
                 </div>

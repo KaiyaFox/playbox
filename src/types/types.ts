@@ -8,7 +8,9 @@ export interface SpotifyTrack {
     name: string;
     popularity?: number;
     artists: { name: string }[];
-    album: { images: { url: string }[] };
+    album: {
+        name: string;
+        images: { url: string }[] };
     external_urls?: { spotify: string };
     genre?: string[];
     isPlaying?: boolean;

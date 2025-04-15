@@ -28,6 +28,15 @@ export default function RecentlyPlayed({ items }: { items: SpotifyTrack[] }) {
                             <p className="text-sm text-gray-400">
                                 {track.artists.map(artist => artist.name).join(", ")}
                             </p>
+                            <p className="text-sm text-gray-500">{track.album.name}</p>
+                            <a
+                                href={track.external_urls?.spotify}
+                                target="_blank"
+                                rel="noopener noreferrer"
+                                className="text-sm text-gray-400 hover:underline"
+                            >
+                                Open in Spotify
+                            </a>
                         </div>
                     </div>
                 </div>
