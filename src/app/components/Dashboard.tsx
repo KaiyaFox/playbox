@@ -156,10 +156,18 @@ export default function Dashboard() {
                 {/* Show content only if user is logged in */}
                 {session ? (
                     <>
-                        {/* Left Section - Top Artist */}
                         <div className="w-full lg:w-1/3 p-4">
-                            <div className="bg-base-200 rounded-lg p-6 shadow-lg">
-                                <TopArtist />
+                            <div className="flex flex-col gap-4">
+                                <div className="bg-base-200 rounded-lg p-6 shadow-lg w-full text-center">
+                                    <TopArtist />
+                                </div>
+                                <div className="bg-base-200 rounded-lg p-6 shadow-lg w-full text-center">
+                                    <TopArtist />
+                                </div>
+                                <div className="bg-base-200 rounded-lg p-6 shadow-lg w-full text-center">
+                                    <TopArtist />
+                                </div>
+                                {/* Add more if needed */}
                             </div>
                         </div>
 

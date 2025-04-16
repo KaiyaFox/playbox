@@ -8,6 +8,7 @@ import PlayList from "@/app/components/PlayList";
 import UsersTopArtist from "@/app/components/PublicProfile/UsersTop";
 import RecentlyPlayed from "@/app/components/PublicProfile/RecentlyPlayed";
 import {SpotifyTrack} from "@/types/types";
+import FollowButton from "@/app/components/PublicProfile/FollowButton";
 
 
 interface User {
@@ -127,6 +128,7 @@ export default function Profile() {
 
                                 {/* Social Media Icons */}
                             </div>
+                            <FollowButton/>
 
                             {/* Recently Played Section */}
                             <div className="bg-gray-800 rounded-lg shadow-lg p-6 mt-8">

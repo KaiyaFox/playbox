@@ -173,12 +173,8 @@ export default function MyAccount() {
                 <button className="btn btn-success w-full max-w-xs" onClick={handleSave}>
                     Save
                 </button>
-            </div>
-
-            {/* Delete Button (Positioned Bottom-Right) */}
-            <div className="fixed bottom-4 right-4">
                 <Link href="/delete">
-                    <button className="btn btn-error">Delete Account</button>
+                    <button className="btn btn-error w-full max-w-xs">Delete Account</button>
                 </Link>
             </div>
 

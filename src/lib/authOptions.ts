@@ -99,6 +99,7 @@ export const authOptions: NextAuthOptions = {
             // 2️⃣ On every other request, check if token is expired
             if (Date.now() >= (token.expiresAt ?? 0)) {
                 console.log("Access token expired, refreshing...");
+                // This might need to be renamed refreshToken
                 return await refreshAccessToken(token);
             }
 
