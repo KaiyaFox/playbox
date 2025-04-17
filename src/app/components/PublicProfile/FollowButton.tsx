@@ -1,8 +1,27 @@
+import { useState } from "react";
+import {PlayBoxUser} from "@/types/types";
 
-export default function FollowButton() {
+
+interface FollowButtonProps {
+    followee: string | null;
+    followedId: string | null;
+}
+export default function FollowButton({followee, followedId }: FollowButtonProps) {
+
+    // Make button dynamic so that it shows "Following" if the user is already following and "Follow" if not and Unfollow if the user is already following
+
+    const [followerId, setFollowerId] = useState<PlayBoxUser | null>(null);
+    const [followingId, setFollowingId] = useState<PlayBoxUser | null>(null);
+    const [isFollowing, setIsFollowing] = useState(false);
+
+
+console.log("I am: ", followee);
+
+
     const handleFollow = () => {
         // Handle follow logic here
         console.log("Follow button clicked");
+
 
 
         // Call follow API
@@ -13,8 +32,8 @@ export default function FollowButton() {
             },
             body: JSON.stringify(
                 {
-                followerId: "b1c7582b-25a2-42ae-9cc4-a713a13a9469", // Replace with actual follower ID
-                followingId: "7e3338c3-2ce7-4331-965e-77958ffe6130", // Replace with actual following ID
+                followerId: followee, // Replace with actual follower ID
+                followingId: followedId, // Replace with actual following ID
                 }
             ),
         })

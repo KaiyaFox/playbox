@@ -161,12 +161,6 @@ export default function Dashboard() {
                                 <div className="bg-base-200 rounded-lg p-6 shadow-lg w-full text-center">
                                     <TopArtist />
                                 </div>
-                                <div className="bg-base-200 rounded-lg p-6 shadow-lg w-full text-center">
-                                    <TopArtist />
-                                </div>
-                                <div className="bg-base-200 rounded-lg p-6 shadow-lg w-full text-center">
-                                    <TopArtist />
-                                </div>
                                 {/* Add more if needed */}
                             </div>
                         </div>
@@ -186,24 +180,20 @@ export default function Dashboard() {
                                                     className="rounded-3xl shadow-xl opacity-90 mx-auto"
                                                 />
                                             </div>
-
                                         )}
                                         <h1 className="text-3xl sm:text-4xl font-bold text-purple-400 mb-3 mt-3">
                                             {trackData.track}
                                             <p className="text-lg text-gray-400">{trackData.artist}</p>
-
                                         </h1>
                                         <Popularity popularity={trackData.popularity} />
                                         <p className="text-xl sm:text-2xl text-white font-semibold">
                                             {trackData.isPlaying ? "🔊" : "Spotify Paused. Play something on Spotify."}
                                         </p>
 
-
                                         <div className="mt-4">
                                             <Artist artistId={trackData.artistId || ''} />
                                         </div>
 
-                                        {/* Comments Component */}
                                         <div className="mt-6">
                                             <Comments
                                                 spotifySongId={trackData.trackId || ''}
@@ -214,17 +204,7 @@ export default function Dashboard() {
                                         </div>
                                     </>
                                 ) : (
-                                    <div className="text-center">
-                                        <h1 className="text-4xl sm:text-5xl font-bold bg-gradient-to-r from-purple-400 via-pink-500 to-red-500 bg-clip-text text-transparent">
-                                            Welcome to PlayBox!
-                                        </h1>
-                                        <p className="text-lg sm:text-2xl text-gray-300 mt-2">
-                                            Connect your Spotify account to get started.
-                                        </p>
-                                        <div className="mt-4">
-                                            <AuthButton />
-                                        </div>
-                                    </div>
+                                    <p className="text-xl text-gray-400">No track data available. Play something on Spotify!</p>
                                 )}
                             </div>
                         </div>
@@ -239,7 +219,7 @@ export default function Dashboard() {
                 ) : (
                     <div className="text-center">
                     <h1 className="text-4xl sm:text-5xl font-bold bg-gradient-to-r from-purple-400 via-pink-500 to-red-500 bg-clip-text text-transparent">
-                    Welcome to PlayBox!
+                    Welcome to PlayBox! 🎉
                     </h1>
                     <p className="text-lg sm:text-2xl text-gray-300 mt-2">
                     Connect your Spotify account to get started.

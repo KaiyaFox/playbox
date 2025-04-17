@@ -61,7 +61,31 @@ export async function POST(request: NextRequest) {
 
 }
 
-// // Unfollow a user
-// export async function DELETE(request: NextRequest) {
-//     const { followerId, followingId } = await request.json();
-// }
+// Unfollow a user
+export async function DELETE(request: NextRequest) {
+    const { followerId, followingId } = await request.json();
+
+    const session = await getServerSession(authOptions);
+    if (!session) {
+        return NextResponse.json({ error: "Unauthorized" }, { status: 401 });
+    }
+
+    try {
+        // Delete the follow relationship
+        const { error } = await supabase
+            .from("follows")
+            .delete()
+            .eq("follower_id", followerId)
+            .eq("following_id", followingId);
+
+        if (error) {
+            console.error("Error unfollowing user:", error);
+            return NextResponse.json({ error: "Failed to unfollow user" }, { status: 500 });
+        }
+
+        return NextResponse.json({ message: "Unfollowed successfully" }, { status: 200 });
+    } catch (error) {
+        console.error("Error unfollowing user:", error);
+        return NextResponse.json({ error: "Failed to unfollow user" }, { status: 500 });
+    }
+}

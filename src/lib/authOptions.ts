@@ -61,6 +61,7 @@ export const authOptions: NextAuthOptions = {
                 console.log("Initial sign-in detected.");
                 const spotifyProfile = profile as SpotifyProfile;
 
+
                 token.accessToken = account.access_token as string;
                 token.refreshToken = account.refresh_token;
                 token.expiresAt = account.expires_at ? account.expires_at * 1000 : Date.now() + 3600 * 1000;
@@ -73,6 +74,7 @@ export const authOptions: NextAuthOptions = {
                     .select("email")
                     .eq("email", spotifyProfile.email)
                     .single();
+
 
                 if (!existingUser) {
                     const { data, error: insertError } = await supabase
@@ -91,6 +93,17 @@ export const authOptions: NextAuthOptions = {
                     } else {
                         token.supabaseUserId = data.id;
                     }
+                }
+
+                // get uuid from supabase
+                const { data: user } = await supabase
+                    .from("users")
+                    .select("id")
+                    .eq("spotify_id", spotifyProfile.id)
+                    .single();
+                if (user) {
+                    token.supabaseUserId = user.id;
+                    console.log("WHAT ID????", token.supabaseUserId);
                 }
 
                 return token; // ✅ Exit early — no refresh needed yet
@@ -112,6 +125,7 @@ export const authOptions: NextAuthOptions = {
             session.expiresAt = token.expiresAt;
             session.error = token.error;
             session.user.spotifyId = token.spotifyId;
+            session.supabaseUserId = token.supabaseUserId;
             return session;
         },
     },

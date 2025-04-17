@@ -45,7 +45,8 @@ export interface PlayBoxUser {
     public: boolean;
     playlist: string;
     recently_played: RecentlyPlayedTracks;
-    comments: string[];
+    comments?: string[];
+    followers?: string[];
 }
 
 // interface SpotifyProfile extends Profile {

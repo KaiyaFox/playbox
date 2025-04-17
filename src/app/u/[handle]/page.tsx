@@ -9,13 +9,16 @@ import UsersTopArtist from "@/app/components/PublicProfile/UsersTop";
 import RecentlyPlayed from "@/app/components/PublicProfile/RecentlyPlayed";
 import {SpotifyTrack} from "@/types/types";
 import FollowButton from "@/app/components/PublicProfile/FollowButton";
+import { useSession } from "next-auth/react";
 
 
 interface User {
+    id: string;
     name: string;
     image: string;
     public: boolean;
     playlist: string;
+
 }
 
 interface TopArtist {
@@ -33,6 +36,10 @@ export default function Profile() {
 
     const params = useParams();
     let handle = params?.handle;
+    const session = useSession();
+    const loggedInUserId = session?.data?.supabaseUserId
+    console.log(loggedInUserId);
+
 
     if (Array.isArray(handle)) {
         handle = handle[0]
@@ -49,11 +56,12 @@ export default function Profile() {
     useEffect(() => {
         if (!handle) return; // Prevent execution if handle is undefined
 
+        // Fetch the users public profile data
         const fetchUser = async () => {
             try {
                 const { data, error } = await supabase
                     .from("users")
-                    .select("name, image, public, playlist, recently_played")
+                    .select("name, image, public, playlist, recently_played, id")
                     .eq("handle", handle)
                     .single();
 
@@ -128,7 +136,7 @@ export default function Profile() {
 
                                 {/* Social Media Icons */}
                             </div>
-                            <FollowButton/>
+                            <FollowButton followee={loggedInUserId ?? null} followedId={user.id}/>
 
                             {/* Recently Played Section */}
                             <div className="bg-gray-800 rounded-lg shadow-lg p-6 mt-8">
