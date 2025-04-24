@@ -72,7 +72,7 @@ export default function Comments({ spotifySongId, userId, track, onCommentsFetch
         }
 
         loadComments();
-    }, [spotifySongId, currentSpotifyId, onCommentsFetched, commentText]); // Ensures component reloads when sp
+    }, [spotifySongId, currentSpotifyId]); // Ensures component reloads when sp
 
     // Handle adding a new comment
     const handleClick = async () => {
@@ -114,7 +114,7 @@ export default function Comments({ spotifySongId, userId, track, onCommentsFetch
             {isLoading ? (
                 <p className="text-gray-400 text-sm">Loading comments...</p>
             ) : comments.length > 0 ? (
-                <div className="comments-list overflow-y-auto max-h-40 pr-1 space-y-2">
+                <div className="comments-list overflow-y-auto max-h-80 pr-1 space-y-2">
                     {comments.map((comment) => (
                         <div key={comment.id} className="bg-gray-800/50 p-2 rounded-md">
                             <div className="flex flex-col text-left break-words overflow-auto">

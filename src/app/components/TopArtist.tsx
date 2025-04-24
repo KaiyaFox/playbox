@@ -37,29 +37,29 @@ export default function TopArtist() {
     }, []);
     return stats ? (
         <>
-            <div className="tooltip tooltip-bottom text-left"
-                 data-tip="Your affinity artist is the top artist you interact with on Spotify. PlayBox updates this
-                 periodically and this can change from week to week depending on your listening activity">
-                <div className="stats shadow">
+            <div className="tooltip tooltip-bottom text-left w-full max-w-md mx-auto"
+                 data-tip="Your affinity artist is the top artist you interact with on Spotify. PlayBox updates this periodically and this can change from week to week depending on your listening activity">
+                <div className="stats shadow w-full">
                     <div className="stat">
                         <div className="stat-figure text-primary">
                             <div className="avatar">
-                                <div className="w-16 rounded-full">
+                                <div className="w-17 rounded-full">
                                     <Image
                                         src={stats?.affinityImage || ''}
                                         alt="Album Art"
-                                        width={600}
-                                        height={600}
-                                        className="rounded-3xl shadow-xl opacity-90 mb-4"
+                                        width={64}
+                                        height={64}
+                                        className="rounded-full object-cover"
                                     />
                                 </div>
                             </div>
                         </div>
                         <div className="stat-title">Your Affinity</div>
-                        <div className="stat-value text-primary">{stats?.topAffinity || "Not Available"}</div>
-                        <div className="stat-desc">You and {Number(stats?.followers).toLocaleString() || "N/A"} others vibe with
-                            this
-                            artist
+                        <div className="stat-value text-primary break-words">
+                            {stats?.topAffinity || "Not Available"}
+                        </div>
+                        <div className="stat-desc text-sm break-words whitespace-normal w-full max-w-full leading-tight">
+                            You and {Number(stats?.followers).toLocaleString() || "N/A"} others vibe with this artist
                         </div>
                     </div>
                 </div>
