@@ -163,10 +163,18 @@ export default function Dashboard() {
             <div className="relative z-10 flex flex-col gap-6 px-4 pt-20 sm:pt-24 lg:pt-16 max-w-7xl mx-auto">
                 {session ? (
                     <div className="grid grid-cols-1 lg:grid-cols-3 gap-6 items-start">
-                        {/* Left - Top Artist */}
-                        <div className="flex flex-col gap-4">
+                        {/* Left - Affinity & Comments */}
+                        <div className="bg-base-200 rounded-xl p-4 shadow-lg flex flex-col gap-4">
                             <TopArtist />
-                            {/* <Concerts topArtist={trackData?.artist} /> */}
+
+                            {trackData && (
+                                <Comments
+                                    spotifySongId={trackData.trackId || ""}
+                                    userId={session?.user?.email || ""}
+                                    track={trackData.track || ""}
+                                    onCommentsFetched={(comments) => console.log(comments)}
+                                />
+                            )}
                         </div>
 
                         {/* Middle - Now Playing */}
@@ -195,14 +203,6 @@ export default function Dashboard() {
                                         <Artist artistId={trackData.artistId || ""} />
                                     </div>
 
-                                    <div className="mt-4 w-full">
-                                        <Comments
-                                            spotifySongId={trackData.trackId || ""}
-                                            userId={session?.user?.email || ""}
-                                            track={trackData.track || ""}
-                                            onCommentsFetched={(comments) => console.log(comments)}
-                                        />
-                                    </div>
                                 </>
                             ) : (
                                 <p className="text-sm text-gray-400">No track data. Play something on Spotify!</p>
