@@ -29,7 +29,7 @@ export async function addSongToDatabase(spotifyId: string, name: string, artist:
 
 // Add a comment for a specific song
 export async function addCommentToSong(userId: string, songId: string, comment: string) {
-    console.log("USER ID: ", userId);
+    // console.log("USER ID: ", userId);
     const { data, error } = await supabase
         .from('comments')
         .insert([

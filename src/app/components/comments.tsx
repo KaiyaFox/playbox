@@ -63,7 +63,7 @@ export default function Comments({ spotifySongId, userId, track, onCommentsFetch
                 }));
                 setComments(mappedComments);
                 onCommentsFetched(mappedComments);
-                console.log("Comments: ", mappedComments);
+                // console.log("Comments: ", mappedComments);
             } catch (err) {
                 console.error("Failed to load comments:", err);
             } finally {
@@ -98,7 +98,7 @@ export default function Comments({ spotifySongId, userId, track, onCommentsFetch
             }));
             setComments(mappedComments);
             onCommentsFetched(mappedComments);
-            console.log("Comments: ", mappedComments);
+            // console.log("Comments: ", mappedComments);
         } catch (err) {
             console.error("Failed to load comments:", err);
         } finally {
