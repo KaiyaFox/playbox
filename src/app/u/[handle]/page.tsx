@@ -157,12 +157,12 @@ export default function Profile() {
                                         <div className="px-6 py-5 text-center w-full md:w-72">
                                             <p className="text-sm text-gray-400 mb-2">My #1:</p>
                                             <Link href={usersTopArtist.external_urls?.spotify || "#"} target="_blank" rel="noopener noreferrer">
-                                                <div className="w-24 h-24 mx-auto rounded-md overflow-hidden shadow-lg mb-2">
+                                                <div className="w-64 h-64 mx-auto rounded-md overflow-hidden shadow-lg mb-2">
                                                     <Image
-                                                        src={usersTopArtist.images[1].url}
+                                                        src={usersTopArtist.images[0].url}
                                                         alt={usersTopArtist.name}
-                                                        width={128}
-                                                        height={128}
+                                                        width={320}
+                                                        height={320}
                                                         className="object-cover"
                                                     />
                                                 </div>
