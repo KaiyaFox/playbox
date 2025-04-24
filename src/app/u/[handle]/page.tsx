@@ -5,11 +5,12 @@ import { supabase } from "@/lib/supabaseClient";
 import { useParams } from "next/navigation";
 import Image from "next/image";
 import PlayList from "@/app/components/PlayList";
-import UsersTopArtist from "@/app/components/PublicProfile/UsersTop";
+// import UsersTopArtist from "@/app/components/PublicProfile/UsersTop";
 import RecentlyPlayed from "@/app/components/PublicProfile/RecentlyPlayed";
 import {SpotifyTrack} from "@/types/types";
 import FollowButton from "@/app/components/PublicProfile/FollowButton";
 import { useSession } from "next-auth/react";
+import Link from "next/link";
 
 
 interface User {
@@ -52,6 +53,7 @@ export default function Profile() {
     const [recentlyPlayed, setRecentlyPlayed] = useState<SpotifyTrack[] | null>(null);
     const [noData, setNoData] = useState(false);
     const [usersTopArtist, setUsersTopArtist] = useState<TopArtist | null>(null); // State to store top artist data
+    const [bio, setBio] = useState<string | null>(null); // State to store bio data
 
     useEffect(() => {
         if (!handle) return; // Prevent execution if handle is undefined
@@ -61,7 +63,7 @@ export default function Profile() {
             try {
                 const { data, error } = await supabase
                     .from("users")
-                    .select("name, image, public, playlist, recently_played, id")
+                    .select("name, image, public, playlist, recently_played, id, bio")
                     .eq("handle", handle)
                     .single();
 
@@ -80,6 +82,7 @@ export default function Profile() {
                     setUser(data); // Save user data
                     setIsPublic(data.public); // Save public status
                     setImage(data.image); // Save image
+                    setBio(data.bio); // Save bio
                     setPlaylistId(data.playlist); // Save playlist
                     setRecentlyPlayed(data.recently_played); // Save recently played
                 }
@@ -108,42 +111,69 @@ export default function Profile() {
                 ) : user ? (
                     isPublic ? (
                         <>
-                            {/* Profile Header */}
-                            <div className="flex flex-col items-center justify-center text-center p-6 bg-gray-800 rounded-lg shadow-lg mb-8">
-                                <div className="avatar mb-4">
-                                    <div className="w-32 h-32 rounded-full overflow-hidden border-4 border-white">
-                                        <Image
-                                            src={image}
-                                            alt="User Avatar"
-                                            width={128}
-                                            height={128}
-                                            className="object-cover"
-                                        />
-                                    </div>
+                            <div className="relative bg-gray-800/70 backdrop-blur-lg rounded-xl shadow-lg p-6 md:p-10 mb-8">
+                                {/* Background Blur */}
+                                <div className="absolute inset-0 z-0">
+                                    <Image
+                                        src={image}
+                                        alt="Header Background"
+                                        fill
+                                        className="object-cover opacity-10 blur-lg"
+                                    />
                                 </div>
-                                <h1 className="text-3xl font-bold mb-2">{user.name}</h1>
-                                <p className="text-gray-400 mb-2">@{handle}</p>
 
-                                {/*Follow Button Top Right*/}
-                                <div className="relative">
-                                    {loggedInUserId && loggedInUserId !== user.id && (
-                                        <FollowButton followee={loggedInUserId ?? null} followedId={user.id}/>
+                                {/* Content Split */}
+                                <div className="relative z-10 flex flex-col md:flex-row justify-between items-center gap-8">
+                                    {/* Left: User Info */}
+                                    <div className="flex flex-col items-center md:items-start text-center md:text-left">
+                                        {/* Avatar */}
+                                        <div className="relative w-32 h-32 mb-4">
+                                            <Image
+                                                src={image}
+                                                alt="User Avatar"
+                                                width={128}
+                                                height={128}
+                                                className="rounded-full border-4 border-white shadow-md"
+                                            />
+                                        </div>
 
+                                        <h1 className="text-3xl font-bold">{user.name}</h1>
+                                        <p className="text-gray-400 text-sm mb-1">@{handle}</p>
+                                        <p className="text-sm text-gray-500 mb-2">2.3k followers</p>
+
+                                        {/* Follow Button */}
+                                        {loggedInUserId && loggedInUserId !== user.id && (
+                                            <FollowButton followee={loggedInUserId} followedId={user.id} />
+                                        )}
+
+                                        {/* Bio */}
+                                        <p className="mt-4 max-w-md text-sm text-gray-300 italic">
+                                            {bio || "Im on PlayBox!"}
+                                        </p>
+                                    </div>
+
+                                    {/* Right: Top Artist */}
+                                    {usersTopArtist && (
+                                        <div className="px-6 py-5 text-center w-full md:w-72">
+                                            <p className="text-sm text-gray-400 mb-2">My #1:</p>
+                                            <Link href={usersTopArtist.external_urls?.spotify || "#"} target="_blank" rel="noopener noreferrer">
+                                                <div className="w-24 h-24 mx-auto rounded-md overflow-hidden shadow-lg mb-2">
+                                                    <Image
+                                                        src={usersTopArtist.images[1].url}
+                                                        alt={usersTopArtist.name}
+                                                        width={128}
+                                                        height={128}
+                                                        className="object-cover"
+                                                    />
+                                                </div>
+                                            </Link>
+                                            <h3 className="text-lg font-semibold">{usersTopArtist.name}</h3>
+                                            <p className="text-xs text-gray-400 italic mt-1">
+                                                {usersTopArtist.genres?.join(", ")}
+                                            </p>
+                                        </div>
                                     )}
                                 </div>
-
-                                {usersTopArtist && (
-                                    <UsersTopArtist
-                                        id={usersTopArtist.id}
-                                        name={usersTopArtist.name}
-                                        images={usersTopArtist.images[0].url}
-                                        genres={usersTopArtist.genres}
-                                    >
-
-                                    </UsersTopArtist>
-                                )}
-
-                                {/* Social Media Icons */}
                             </div>
 
 
