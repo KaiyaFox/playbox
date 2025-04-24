@@ -49,15 +49,17 @@ export default function Artist({ artistId }: ArtistProps) {
     return (
         <div className="stats shadow">
             <div className="stat">
-                <div className="stat-title">Style Tags</div>
+                <div className="stat-title mb-2">Style Tags</div>
                 <div className="stat-value">
-                    {artistData?.genre && artistData.genre.length > 0
-                        ? artistData.genre.map((g, idx) => (
-                            <div key={idx} className="badge badge-primary mr-2">
-                                {g}
-                            </div>
-                        ))
-                        : "No genre available"}
+                    <div className="flex flex-wrap gap-2 justify-center">
+                        {artistData?.genre && artistData.genre.length > 0
+                            ? artistData.genre.map((g, idx) => (
+                                <div key={idx} className="badge badge-primary">
+                                    {g}
+                                </div>
+                            ))
+                            : "No style tags 🤔"}
+                    </div>
                 </div>
 
                 <div className="rating gap-3"></div>

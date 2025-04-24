@@ -11,6 +11,8 @@ import Artist from "@/app/components/Artist";
 import Comments from "@/app/components/comments";
 import { addSongToDatabase } from "@/app/supabase/addSong";
 import TopArtist from "@/app/components/TopArtist";
+// import Concerts from "@/app/components/Concerts";
+
 
 interface RecentlyPlayedItem {
     track: {
@@ -126,6 +128,8 @@ export default function Dashboard() {
 
     // For now we useeffect to call the api to sync the recently played that will save to supabase
     useEffect(() => {
+        console.log("TRACKDATA: ", trackData?.artist);
+
         const syncRecentlyPlayed = async () => {
             try {
                 const res = await fetch("/api/recently-played");
@@ -158,16 +162,17 @@ export default function Dashboard() {
                     <>
                         <div className="w-full lg:w-1/3 p-4">
                             <div className="flex flex-col gap-4">
-                                <div className="bg-base-200 rounded-lg p-6 shadow-lg w-full text-center">
+                                <div className="text-center">
                                     <TopArtist />
                                 </div>
-                                {/* Add more if needed */}
+                                {/* Concert section NYI */}
+                                {/*<Concerts topArtist={trackData?.artist} />*/}
                             </div>
                         </div>
 
                         {/* Center Section - Track Data */}
                         <div className="w-full lg:w-1/3 p-4">
-                            <div className="bg-base-200 rounded-lg p-6 shadow-lg text-center">
+                            <div className="bg-base-200 rounded-lg p-6 shadow-lg text-center max-w-md mx-auto">
                                 {trackData ? (
                                     <>
                                         {trackData.albumArt && (
@@ -190,7 +195,7 @@ export default function Dashboard() {
                                             {trackData.isPlaying ? "🔊" : "Spotify Paused. Play something on Spotify."}
                                         </p>
 
-                                        <div className="mt-4">
+                                        <div className="mt-4 max-w-screen-md">
                                             <Artist artistId={trackData.artistId || ''} />
                                         </div>
 
