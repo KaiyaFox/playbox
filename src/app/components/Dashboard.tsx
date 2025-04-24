@@ -147,7 +147,7 @@ export default function Dashboard() {
         if (session) {
             syncRecentlyPlayed();
         }
-    }, [session]);
+    }, [session, trackData]);
 
 
     return (
@@ -155,86 +155,79 @@ export default function Dashboard() {
             {/* Background */}
             <div id="vanta-background" className="fixed inset-0 z-0 w-full h-full opacity-100" />
 
-            {/* Main Content */}
-            <div className="relative flex flex-col lg:flex-row items-center justify-center min-h-screen px-4 pt-20 sm:pt-24">
-                {/* Show content only if user is logged in */}
+            <div
+                id="vanta-background"
+                className="fixed inset-0 z-0 w-full h-full opacity-100"
+            />
+
+            <div className="relative z-10 flex flex-col gap-6 px-4 pt-20 sm:pt-24 lg:pt-16 max-w-7xl mx-auto">
                 {session ? (
-                    <>
-                        <div className="w-full lg:w-1/3 p-4">
-                            <div className="flex flex-col gap-4">
-                                <div className="text-center">
-                                    <TopArtist />
-                                </div>
-                                {/* Concert section NYI */}
-                                {/*<Concerts topArtist={trackData?.artist} />*/}
-                            </div>
+                    <div className="grid grid-cols-1 lg:grid-cols-3 gap-6 items-start">
+                        {/* Left - Top Artist */}
+                        <div className="flex flex-col gap-4">
+                            <TopArtist />
+                            {/* <Concerts topArtist={trackData?.artist} /> */}
                         </div>
 
-                        {/* Center Section - Track Data */}
-                        <div className="w-full lg:w-1/3 p-4">
-                            <div className="bg-base-200 rounded-lg p-6 shadow-lg text-center max-w-md mx-auto">
-                                {trackData ? (
-                                    <>
-                                        {trackData.albumArt && (
-                                            <div className="mt-4">
-                                                <Image
-                                                    src={trackData.albumArt}
-                                                    alt="Album Art"
-                                                    width={400}
-                                                    height={400}
-                                                    className="rounded-3xl shadow-xl opacity-90 mx-auto"
-                                                />
-                                            </div>
-                                        )}
-                                        <h1 className="text-3xl sm:text-4xl font-bold text-purple-400 mb-3 mt-3">
-                                            {trackData.track}
-                                            <p className="text-lg text-gray-400">{trackData.artist}</p>
-                                        </h1>
-                                        <Popularity popularity={trackData.popularity} />
-                                        <p className="text-xl sm:text-2xl text-white font-semibold">
-                                            {trackData.isPlaying ? "🔊" : "Spotify Paused. Play something on Spotify."}
-                                        </p>
+                        {/* Middle - Now Playing */}
+                        <div className="bg-base-200 rounded-xl p-4 shadow-lg flex flex-col items-center text-center">
+                            {trackData ? (
+                                <>
+                                    {trackData.albumArt && (
+                                        <Image
+                                            src={trackData.albumArt}
+                                            alt="Album Art"
+                                            width={240}
+                                            height={240}
+                                            className="rounded-xl shadow-md opacity-90"
+                                        />
+                                    )}
+                                    <div className="mt-3 mb-1">
+                                        <h1 className="text-2xl font-bold text-purple-400">{trackData.track}</h1>
+                                        <p className="text-gray-400 text-sm">{trackData.artist}</p>
+                                    </div>
+                                    <Popularity popularity={trackData.popularity} />
+                                    <p className="text-white text-sm mt-2">
+                                        {trackData.isPlaying ? "🔊" : "Spotify Paused"}
+                                    </p>
 
-                                        <div className="mt-4 max-w-screen-md">
-                                            <Artist artistId={trackData.artistId || ''} />
-                                        </div>
+                                    <div className="mt-4 w-full">
+                                        <Artist artistId={trackData.artistId || ""} />
+                                    </div>
 
-                                        <div className="mt-6">
-                                            <Comments
-                                                spotifySongId={trackData.trackId || ''}
-                                                userId={session?.user?.email || ''}
-                                                track={trackData.track || ''}
-                                                onCommentsFetched={(comments) => console.log(comments)}
-                                            />
-                                        </div>
-                                    </>
-                                ) : (
-                                    <p className="text-xl text-gray-400">No track data available. Play something on Spotify!</p>
-                                )}
-                            </div>
+                                    <div className="mt-4 w-full">
+                                        <Comments
+                                            spotifySongId={trackData.trackId || ""}
+                                            userId={session?.user?.email || ""}
+                                            track={trackData.track || ""}
+                                            onCommentsFetched={(comments) => console.log(comments)}
+                                        />
+                                    </div>
+                                </>
+                            ) : (
+                                <p className="text-sm text-gray-400">No track data. Play something on Spotify!</p>
+                            )}
                         </div>
 
-                        {/* Right Section - Recently Played */}
-                        <div className="w-full lg:w-1/3 p-4">
-                            <div className="bg-base-200 rounded-lg p-6 shadow-lg">
-                                <RecentlyPlayed recentlyPlayed={trackData?.recentlyPlayed || []} />
-                            </div>
+                        {/* Right - Recently Played */}
+                        <div className="bg-base-200 rounded-xl p-4 shadow-lg">
+                            <RecentlyPlayed recentlyPlayed={trackData?.recentlyPlayed || []} />
                         </div>
-                    </>
+                    </div>
                 ) : (
-                    <div className="text-center">
-                    <h1 className="text-4xl sm:text-5xl font-bold bg-gradient-to-r from-purple-400 via-pink-500 to-red-500 bg-clip-text text-transparent">
-                    Welcome to PlayBox! 🎉
-                    </h1>
-                    <p className="text-lg sm:text-2xl text-gray-300 mt-2">
-                    Connect your Spotify account to get started.
-                    </p>
-                        <p className="italic">Closed Beta</p>
-                    <div className="mt-4">
-                    <AuthButton />
+                    <div className="text-center max-w-xl mx-auto mt-20">
+                        <h1 className="text-4xl font-bold bg-gradient-to-r from-purple-400 via-pink-500 to-red-500 bg-clip-text text-transparent">
+                            Welcome to PlayBox! 🎉
+                        </h1>
+                        <p className="text-lg text-gray-300 mt-2">
+                            Connect your Spotify account to get started.
+                        </p>
+                        <p className="italic text-sm mt-1">Closed Beta</p>
+                        <div className="mt-4">
+                            <AuthButton />
+                        </div>
                     </div>
-                    </div>
-                    )}
+                )}
             </div>
         </>
     );

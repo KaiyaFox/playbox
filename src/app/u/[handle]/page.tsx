@@ -123,6 +123,15 @@ export default function Profile() {
                                 </div>
                                 <h1 className="text-3xl font-bold mb-2">{user.name}</h1>
                                 <p className="text-gray-400 mb-2">@{handle}</p>
+
+                                {/*Follow Button Top Right*/}
+                                <div className="relative">
+                                    {loggedInUserId && loggedInUserId !== user.id && (
+                                        <FollowButton followee={loggedInUserId ?? null} followedId={user.id}/>
+
+                                    )}
+                                </div>
+
                                 {usersTopArtist && (
                                     <UsersTopArtist
                                         id={usersTopArtist.id}
@@ -136,7 +145,7 @@ export default function Profile() {
 
                                 {/* Social Media Icons */}
                             </div>
-                            <FollowButton followee={loggedInUserId ?? null} followedId={user.id}/>
+
 
                             {/* Recently Played Section */}
                             <div className="bg-gray-800 rounded-lg shadow-lg p-6 mt-8">

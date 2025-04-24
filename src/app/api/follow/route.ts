@@ -61,6 +61,8 @@ export async function POST(request: NextRequest) {
 
 }
 
+
+
 // Unfollow a user
 export async function DELETE(request: NextRequest) {
     const { followerId, followingId } = await request.json();

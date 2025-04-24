@@ -1,12 +1,13 @@
 import Image from "next/image";
+import { formatDistanceToNow } from "date-fns";
 
 interface RecentlyPlayedItem {
     track: {
         name: string;
+        artists?: { name: string }[];
         album: {
-            images: { url: string } [];
+            images: { url: string }[];
         };
-
     };
     played_at: string;
     context: string | null;
@@ -16,39 +17,39 @@ interface RecentlyPlayedProps {
     recentlyPlayed: RecentlyPlayedItem[];
 }
 
-export default function RecentlyPlayed({recentlyPlayed}: RecentlyPlayedProps) {
-    // Check if data ready
+export default function RecentlyPlayed({ recentlyPlayed }: RecentlyPlayedProps) {
     if (!recentlyPlayed || recentlyPlayed.length === 0) {
-        return (
-            <div>
-                Recently played tracks arent available 😔
-            </div>
-        )
+        return <div>Recently played tracks aren&#39;t available 😔</div>;
     }
+
     return (
         <div>
-            <ul className="list bg-base-300/30 rounded-box shadow-md backdrop-blur-sm">
-                <li className="p-4 pb-2 text-sm opacity-60 tracking-wide">Your Recently Played</li>
-                {recentlyPlayed.map((item, index) => (
-                    <li key={index} className="list-row">
-                        <div className="text-4xl font-thin opacity-30 tabular-nums text-right">{index + 1}</div>
-                        <div>
-                            <Image
-                                className="size-20 rounded-box"
-                                width={100}
-                                height={100}
-                                src={item.track.album.images[0].url}
-                                alt="Album Art"
+            <h2 className="text-sm opacity-60 tracking-wide mb-2">Your Recently Played</h2>
+            <ul className="space-y-4">
+                {recentlyPlayed.map((item, index) => {
+                    const artistNames = item.track.artists?.map(a => a.name).join(", ");
+                    const playedAgo = formatDistanceToNow(new Date(item.played_at), { addSuffix: true });
 
+                    return (
+                        <li
+                            key={index}
+                            className="flex items-center gap-4 bg-base-300/30 rounded-xl p-3 shadow-sm hover:bg-base-200 transition-all"
+                        >
+                            <Image
+                                className="rounded-md shadow-md"
+                                width={64}
+                                height={64}
+                                src={item.track.album.images[0]?.url}
+                                alt="Album Art"
                             />
-                        </div>
-                        <div className="list-col-grow">
-                            <div>{item.track.name}</div>
-                            <div className="text-xs uppercase font-semibold opacity-60">{item.played_at}</div>
-                            <div className="divider opacity-70"></div>
-                        </div>
-                    </li>
-                ))}
+                            <div className="flex flex-col overflow-hidden">
+                                <div className="text-sm font-semibold truncate">{item.track.name}</div>
+                                <div className="text-xs text-gray-400 truncate">{artistNames}</div>
+                                <div className="text-xs text-gray-500">{playedAgo}</div>
+                            </div>
+                        </li>
+                    );
+                })}
             </ul>
         </div>
     );
