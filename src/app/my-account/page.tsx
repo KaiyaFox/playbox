@@ -31,6 +31,7 @@ export default function MyAccount() {
         playlist: [] as Playlist[],
         selectedPlaylist: "",
         publicProfile: false,
+        bio: "",
     });
 
     console.log("Session data:", session);
@@ -69,6 +70,7 @@ export default function MyAccount() {
                         playlist: data[0].playlist,
                         selectedPlaylist: data[0].playlist,
                         publicProfile: data[0].public,
+                        bio: data[0].bio,
                     });
 
                 } else {
@@ -80,6 +82,7 @@ export default function MyAccount() {
                         playlist: [],
                         selectedPlaylist: "",
                         publicProfile: false,
+                        bio: "",
                     });
                 }
             })
@@ -98,7 +101,7 @@ export default function MyAccount() {
     const handleSave = async () => {
         const userId = session?.user?.email;
         try {
-            await updateUserProfile(userId, userData.name, userData.handle, userData.selectedPlaylist, userData.publicProfile);
+            await updateUserProfile(userId, userData.name, userData.handle, userData.selectedPlaylist, userData.publicProfile, userData.bio);
         } catch (error) {
             console.error("Error updating user profile:", error);
         }
@@ -113,74 +116,97 @@ export default function MyAccount() {
     };
 
     return session ? (
-        <div className="container mx-auto p-4 relative min-h-screen">
-            {/* Header Section */}
-            <div className="text-center mb-8">
-                <h1 className="text-4xl font-bold mb-2">Your PlayBox Account</h1>
-                <p className="text-xl text-gray-600">{session.user.name}</p>
+        <div className="container mx-auto p-4 max-w-3xl">
+            {/* Profile Header */}
+            <div className="text-center mb-10">
+                <h1 className="text-4xl font-bold">Welcome back, {session.user.name} 👋</h1>
+                <p className="text-lg text-gray-500">Manage your public profile and preferences</p>
             </div>
 
             {/* Handle Section */}
-            <div className="card bg-base-200 shadow-xl p-6 mb-8">
-                <h2 className="text-2xl font-semibold mb-4">Handle - www.playbox.music/u/{userData.handle}</h2>
-                <input
-                    type="text"
-                    placeholder="enter a custom handle"
-                    className="input input-bordered w-full max-w-xs"
-                    value={userData.handle}
-                    onChange={handleChange}
+            <div className="card bg-base-200 shadow-xl p-6 mb-6">
+                <h2 className="text-xl font-semibold mb-2">Custom Profile Handle</h2>
+                <p className="mb-2 text-sm text-gray-500">This is your public username for your PlayBox profile.</p>
+                <label className="input input-bordered flex items-center gap-2 w-full max-w-md">
+                    <span className="text-gray-400">playbox.music/u/</span>
+                    <input
+                        type="text"
+                        className="grow"
+                        placeholder="your_handle"
+                        value={userData.handle}
+                        onChange={handleChange}
+                    />
+                </label>
+                {inputError && <AlertMessage message={inputError} className="mt-2" />}
+                {userData.handle && (
+                    <div className="mt-6">
+                        <p className="font-medium text-sm mb-2">Your QR Code</p>
+                        <ProfileQR userHandle={userData.handle} />
+                    </div>
+                )}
+            </div>
+
+            {/*Bio*/}
+            <div className="card bg-base-200 shadow-xl p-6 mb-6">
+                <h2 className="text-xl font-semibold mb-2">Bio</h2>
+                <p className="mb-2 text-sm text-gray-500">Add a short bio to your profile.</p>
+                <textarea
+                    className="textarea textarea-bordered w-full max-w-md"
+                    placeholder="Tell us about yourself..."
+                    value={userData.bio}
+                    onChange={(e) =>
+                        setUserData((prevData) => ({ ...prevData, bio: e.target.value }))
+                    }
                 />
-                {inputError && <AlertMessage message={inputError} />}
-                <h2 className="text-2xl font-semibold mb-4">Qr Code</h2>
-                {userData.handle && <ProfileQR userHandle={userData.handle} />}
             </div>
 
 
-            {/* Playlist Section */}
-            <div className="card bg-base-200 shadow-xl p-6 mb-8">
-                <h2 className="text-2xl font-semibold mb-4">Showcased Playlist</h2>
-                <p className="italic">Select one of your playlists to showcase on your profile.</p>
+            {/* Playlist Selector */}
+            <div className="card bg-base-200 shadow-xl p-6 mb-6">
+                <h2 className="text-xl font-semibold mb-2">Showcased Playlist</h2>
+                <p className="mb-2 text-sm text-gray-500">Select a playlist to feature on your public profile.</p>
                 <select
                     className="select select-bordered w-full max-w-xs"
+                    value={userData.selectedPlaylist}
                     onChange={handlePlaylistChange}
                 >
-                    <option disabled selected>
+                    <option disabled value="">
                         Choose a playlist
                     </option>
-                    {Array.isArray(userData.playlist) && userData.playlist.map((playlist: Playlist) => (
-                        <option key={playlist.id} value={playlist.id}>
-                            {playlist.name}
-                        </option>
-                    ))}
+                    {Array.isArray(userData.playlist) &&
+                        userData.playlist.map((playlist: Playlist) => (
+                            <option key={playlist.id} value={playlist.id}>
+                                {playlist.name}
+                            </option>
+                        ))}
                 </select>
             </div>
 
-            {/* Profile Section */}
-            <div className="card bg-base-200 shadow-xl p-6 mb-8">
-                <h2 className="text-2xl font-semibold mb-4">Profile</h2>
-                <p className="italic">Enable Profile Visibility</p>
-                <label className="flex items-center space-x-3">
-                    <span>Visibility</span>
-                    <input type="checkbox" className="toggle toggle-primary" checked={userData.publicProfile} onChange={handleVisibilityChange} />
-                </label>
+            {/* Profile Visibility */}
+            <div className="card bg-base-200 shadow-xl p-6 mb-6">
+                <h2 className="text-xl font-semibold mb-2">Profile Visibility</h2>
+                <div className="flex items-center gap-3">
+                    <span className="text-sm">Enable public profile</span>
+                    <input
+                        type="checkbox"
+                        className="toggle toggle-primary"
+                        checked={userData.publicProfile}
+                        onChange={handleVisibilityChange}
+                    />
+                </div>
             </div>
 
-            {/* Action Buttons */}
-            <div className="flex flex-col space-y-4 items-center">
+            {/* Buttons */}
+            <div className="flex flex-col gap-4 items-center mt-8">
                 <Link href="/u/[handle]" as={`/u/${userData.handle}`}>
-                    <button className="btn btn-primary w-full max-w-xs">View Your Public Profile</button>
+                    <button className="btn btn-primary w-full max-w-md">View Public Profile</button>
                 </Link>
-                <button className="btn btn-success w-full max-w-xs" onClick={handleSave}>
-                    Save
+                <button className="btn btn-success w-full max-w-md" onClick={handleSave}>
+                    Save Changes
                 </button>
                 <Link href="/delete">
-                    <button className="btn btn-error w-full max-w-xs">Delete Account</button>
+                    <button className="btn btn-error w-full max-w-md">Delete My Account</button>
                 </Link>
-            </div>
-
-            {/* QR Code Section */}
-            <div className="mt-8 text-center">
-                {/* Add QR Code component here if needed */}
             </div>
         </div>
     ) : (

@@ -4,7 +4,7 @@ import { supabase } from "@/lib/supabaseClient";
 export async function getUserData(userId: string | undefined) {
     const { data, error } = await supabase
         .from('users')
-        .select('id, name, email, handle, playlist, public')
+        .select('id, name, email, handle, playlist, public, bio')
         .eq('email', userId);
 
     if (error) {
@@ -13,10 +13,10 @@ export async function getUserData(userId: string | undefined) {
     return data;
 }
 
-export async function updateUserProfile(userId: string | undefined, name: string, handle: string, playlist: string, profilePublic: boolean) {
+export async function updateUserProfile(userId: string | undefined, name: string, handle: string, playlist: string, profilePublic: boolean, bio: string) {
     const { data, error } = await supabase
         .from('users')
-        .update({ name: name, handle: handle, playlist: playlist, public: profilePublic })
+        .update({ name: name, handle: handle, playlist: playlist, public: profilePublic, bio: bio })
         .eq('email', userId);
 
     if (error) {
