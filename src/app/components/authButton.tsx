@@ -1,41 +1,68 @@
-// app/components/AuthButton.tsx
 "use client";
 
 import { signIn, signOut, useSession } from "next-auth/react";
 import Image from "next/image";
-
+import { useRouter } from "next/navigation";
+import React from "react";
 
 export default function AuthButton() {
-
     const { data: session } = useSession();
+    const router = useRouter();
+
     const avatar = session?.user?.image;
     const userName = session?.user?.name ?? "U";
-    const firstLetter = userName.charAt(0)
-    
-    // Convert session unix time to human read
+    const firstLetter = userName.charAt(0);
 
+    const handleNavigation = (path: string) => {
+        router.push(path);
+    };
 
     if (!session) {
-        console.log("No Session!")
-    } else {
-        console.log(`Session active! Expires ${session.expiresAt}`, Date.now());
+        return (
+            <button className="btn btn-primary btn-sm" onClick={() => signIn("spotify")}>
+                Sign In
+            </button>
+        );
     }
 
-    return session ? (
-        <>
-            <button className="btn btn-primary btn-sm mr-3" onClick={() => signOut()}>Sign Out</button>
-            {avatar ? (
-                <Image className="ring-primary ring-offset-base-100 w-10 rounded-full ring ring-offset-2" src={avatar} alt={"User profile image"} width={30} height={30} />
-            ) : (
-                <div className="avatar placeholder">
-                    <div className="bg-neutral text-neutral-content w-10 rounded-full">
-                        <span className="text-3xl">{firstLetter}</span>
-                    </div>
+    return (
+        <div className="dropdown dropdown-end ml-2">
+            <div tabIndex={0} role="button" className="btn btn-ghost btn-circle avatar">
+                <div className="w-10 rounded-full">
+                    {avatar ? (
+                        <Image
+                            src={avatar}
+                            alt="User avatar"
+                            width={40}
+                            height={40}
+                            className="rounded-full"
+                        />
+                    ) : (
+                        <div className="bg-neutral text-neutral-content w-full h-full flex items-center justify-center rounded-full">
+                            <span className="text-xl">{firstLetter}</span>
+                        </div>
+                    )}
                 </div>
-            )}
-        </>
-    ) : (
-        <button className="btn btn-primary btn-sm" onClick={() => signIn("spotify")}>Sign In</button>
-
+            </div>
+            <ul
+                tabIndex={0}
+                className="menu menu-md dropdown-content bg-base-100 text-base rounded-box mt-3 w-72 py-3 px-2 shadow z-10"
+            >
+                <li>
+                    <a onClick={() => handleNavigation("/")}>
+                        Dashboard
+                    </a>
+                </li>
+                <li>
+                    <a onClick={() => handleNavigation("/my-account")}>
+                        Account Settings
+                        <span className="badge bg-amber-900">New</span>
+                    </a>
+                </li>
+                <li>
+                    <a onClick={() => signOut()}>Logout</a>
+                </li>
+            </ul>
+        </div>
     );
 }

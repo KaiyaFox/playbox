@@ -162,13 +162,19 @@ export default function Profile() {
                                                 alt="User Avatar"
                                                 width={128}
                                                 height={128}
-                                                className="rounded-full border-4 border-white shadow-md"
+                                                className="rounded-full border-2 border-white shadow-md"
                                             />
                                         </div>
 
                                         <h1 className="text-3xl font-bold">{user.name}</h1>
-                                        <p className="text-gray-400 text-sm mb-1">@{handle}</p>
-                                        <p className="text-sm text-gray-500 mb-2">{followersCount || "0"} followers</p>
+                                        <p className="text-gray-400 text-sm mb-1">{handle}</p>
+                                        <Link href={`/followers?userId=${user.id}`} className="text-sm text-gray-400 mb-2">
+                                            <p className="text-sm text-purple-500 mb-2">{followersCount || "0"} followers</p>
+                                        </Link>
+
+
+
+                                        {/* Follow Count */}
 
                                         {/* Follow Button */}
                                         {loggedInUserId && loggedInUserId !== user.id && (
