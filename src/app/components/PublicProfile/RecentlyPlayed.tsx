@@ -13,8 +13,7 @@ export default function RecentlyPlayed({ items }: { items: SpotifyTrack[] }) {
 
     return (
         <div className="bg-base-200 rounded-xl p-4 shadow-lg">
-            <h2 className="text-xl font-bold mb-4">Recently Played</h2>
-            <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4 max-h-[500px] overflow-y-auto pr-2">
+            <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4 max-h-[1200px] overflow-y-auto pr-2">
                 {items.map((track) => (
                     <div key={track.id} className="bg-gray-900 p-4 rounded-lg shadow">
                         <div className="flex items-center gap-4">

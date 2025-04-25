@@ -137,7 +137,7 @@ export default function MyAccount() {
                         onChange={handleChange}
                     />
                 </label>
-                {inputError && <AlertMessage message={inputError} className="mt-2" />}
+                {inputError && <AlertMessage message={inputError} />}
                 {userData.handle && (
                     <div className="mt-6">
                         <p className="font-medium text-sm mb-2">Your QR Code</p>
