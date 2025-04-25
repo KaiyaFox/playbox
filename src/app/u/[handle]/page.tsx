@@ -111,14 +111,14 @@ export default function Profile() {
                 ) : user ? (
                     isPublic ? (
                         <>
-                            <div className="relative bg-gray-800/70 backdrop-blur-lg rounded-xl shadow-lg p-6 md:p-10 mb-8">
+                            <div className="relative bg-gray-800/10 backdrop-blur rounded-xl shadow-lg p-6 md:p-10 mb-8">
                                 {/* Background Blur */}
                                 <div className="absolute inset-0 z-0">
                                     <Image
-                                        src={image}
+                                        src={usersTopArtist?.images[0]?.url || image}
                                         alt="Header Background"
                                         fill
-                                        className="object-cover opacity-10 blur-lg"
+                                        className="object-cover opacity-10 rounded-xl"
                                     />
                                 </div>
 

@@ -6,6 +6,7 @@ import {getServerSession} from "next-auth";
 import {authOptions} from '@/lib/authOptions';
 import { NextResponse } from "next/server";
 
+// Retrieve the follow status of a user
 export async function POST(request: NextRequest) {
     const { followerId, followingId } = await request.json();
 
@@ -33,4 +34,31 @@ export async function POST(request: NextRequest) {
         return NextResponse.json({ error: "Failed to check follow status" }, { status: 500 });
     }
 
+}
+
+// Get how many followers a user has
+export async function GET(request: NextRequest) {
+    const { searchParams } = new URL(request.url);
+    const userId = searchParams.get("userId");
+
+    if (!userId) {
+        return NextResponse.json({ error: "User ID is required" }, { status: 400 });
+    }
+
+    try {
+        const { data, error } = await supabase
+            .from("follows")
+            .select("*")
+            .eq("following_id", userId);
+
+        if (error) {
+            console.error("Error fetching followers:", error);
+            return NextResponse.json({ error: "Failed to fetch followers" }, { status: 500 });
+        }
+
+        return NextResponse.json({ followersCount: data?.length || 0 }, { status: 200 });
+    } catch (error) {
+        console.error("Error fetching followers:", error);
+        return NextResponse.json({ error: "Failed to fetch followers" }, { status: 500 });
+    }
 }
