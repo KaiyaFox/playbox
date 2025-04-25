@@ -54,6 +54,8 @@ export default function Profile() {
     const [noData, setNoData] = useState(false);
     const [usersTopArtist, setUsersTopArtist] = useState<TopArtist | null>(null); // State to store top artist data
     const [bio, setBio] = useState<string | null>(null); // State to store bio data
+    const [followersCount, setFollowersCount] = useState<number | null>(null); // State to store followers count
+    const [profileUserId, setProfileUserId] = useState<string | null>(null); // State to store profile user ID
 
     useEffect(() => {
         if (!handle) return; // Prevent execution if handle is undefined
@@ -68,8 +70,12 @@ export default function Profile() {
                     .single();
 
                 console.log("data: ", data);
-                const usersTopArtist = await getTopArtist(handle); // Fetch top artist data
+
+                // Call method to fetch recently played data
+                const usersTopArtist = await getTopArtist(handle);
+
                 setUsersTopArtist(usersTopArtist)
+                setProfileUserId(data?.id || null); // Set profile user ID
                 console.log("Top Artist:", usersTopArtist);
 
 
@@ -94,6 +100,29 @@ export default function Profile() {
         fetchUser();
 
     }, [handle]);
+
+
+    // Get users following count
+    useEffect(() => {
+        const fetchFollowersCount = async () => {
+
+
+            try {
+                const { count, error } = await supabase
+                    .from("follows")
+                    .select("*", { count: "exact" })
+                    .eq("following_id", profileUserId );
+                if (error) {
+                    console.error("Error fetching followers count:", error);
+                }
+                console.log("Followers count:", count);
+                setFollowersCount(count);
+            } catch (err) {
+                console.error("Error fetching followers count:", err);
+            }
+        }
+        fetchFollowersCount();
+    }, [profileUserId]);
 
     return (
         <div className="min-h-screen bg-gradient-to-b from-gray-900 to-gray-800 text-white">
@@ -139,7 +168,7 @@ export default function Profile() {
 
                                         <h1 className="text-3xl font-bold">{user.name}</h1>
                                         <p className="text-gray-400 text-sm mb-1">@{handle}</p>
-                                        <p className="text-sm text-gray-500 mb-2">2.3k followers</p>
+                                        <p className="text-sm text-gray-500 mb-2">{followersCount || "0"} followers</p>
 
                                         {/* Follow Button */}
                                         {loggedInUserId && loggedInUserId !== user.id && (
