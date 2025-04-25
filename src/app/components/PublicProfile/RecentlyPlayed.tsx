@@ -38,7 +38,7 @@ export default function RecentlyPlayed({ items }: { items: SpotifyTrack[] }) {
                                     rel="noopener noreferrer"
                                     className="inline-flex items-center text-xs text-green-400 hover:text-green-500 mt-1"
                                 >
-                                    Open in Spotify
+                                    Play in Spotify ▶️
                                 </a>
                             </div>
                         </div>

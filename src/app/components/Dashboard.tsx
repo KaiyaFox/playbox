@@ -53,6 +53,7 @@ export default function Dashboard() {
 
     useEffect(() => {
         const fetchNowPlaying = async () => {
+            if (!session) return;
             try {
                 console.log("Fetching now now-playing track...");
                 const response = await fetch("api/now-playing");
@@ -160,9 +161,27 @@ export default function Dashboard() {
                 className="fixed inset-0 z-0 w-full h-full opacity-100"
             />
 
-            <div className="relative z-10 flex flex-col gap-6 px-4 pt-20 sm:pt-24 lg:pt-16 max-w-7xl mx-auto">
+            <div className="relative z-10 flex flex-col gap-6 px-6 pt-20 sm:pt-24 lg:pt-16 max-w-7xl mx-auto min-h-screen">
+
+
+
                 {session ? (
+                    <>
+                        <div className="bg-gradient-to-r from-purple-600 to-pink-500 p-6 rounded-xl shadow-lg text-white text-center mb-4">
+                            <h2 className="text-3xl font-bold">{trackData?.track}</h2>
+                            <p className="text-sm">{trackData?.artist}</p>
+                        </div>
+
+                        {/*Floating Player*/}
+                        <div className="fixed bottom-4 right-4 bg-base-200 p-4 rounded-xl shadow-xl z-50">
+                            <h3 className="font-semibold text-lg">{trackData?.track}</h3>
+                            <p className="text-sm text-gray-400">{trackData?.artist}</p>
+                        </div>
+
+
+
                     <div className="grid grid-cols-1 lg:grid-cols-3 gap-6 items-start">
+
                         {/* Left - Affinity & Comments */}
                         <div className="bg-base-200 rounded-xl p-4 shadow-lg flex flex-col gap-4">
                             <TopArtist />
@@ -176,6 +195,9 @@ export default function Dashboard() {
                                 />
                             )}
                         </div>
+
+
+
 
                         {/* Middle - Now Playing */}
                         <div className="bg-base-200 rounded-xl p-4 shadow-lg flex flex-col items-center text-center">
@@ -214,17 +236,18 @@ export default function Dashboard() {
                             <RecentlyPlayed recentlyPlayed={trackData?.recentlyPlayed || []} />
                         </div>
                     </div>
+                        </>
                 ) : (
-                    <div className="text-center max-w-xl mx-auto mt-20">
-                        <h1 className="text-4xl font-bold bg-gradient-to-r from-purple-400 via-pink-500 to-red-500 bg-clip-text text-transparent">
-                            Welcome to PlayBox! 🎉
-                        </h1>
-                        <p className="text-lg text-gray-300 mt-2">
-                            Connect your Spotify account to get started.
-                        </p>
-                        <p className="italic text-sm mt-1">Closed Beta</p>
-                        <div className="mt-4">
+                    <div className="hero min-h-screen relative z-10">
+                        <div className="card w-full max-w-md bg-base-200 shadow-xl text-center p-8">
+                            <h1 className="text-5xl font-bold text-transparent bg-clip-text bg-gradient-to-r from-purple-400 via-pink-500 to-red-500">
+                                Welcome to PlayBox 🎵
+                            </h1>
+                            <p className="py-4 text-lg text-gray-300">
+                                Connect your Spotify account to unlock your personalized music experience.
+                            </p>
                             <AuthButton />
+                            <p className="italic text-sm mt-2 text-gray-400">🎧 Closed Beta</p>
                         </div>
                     </div>
                 )}
