@@ -244,7 +244,7 @@ export default function Dashboard() {
                                 Welcome to PlayBox 🎵
                             </h1>
                             <p className="py-4 text-lg text-gray-300">
-                                Connect your Spotify account to unlock your personalized music experience.
+                                Connect your Spotify account to unlock your personalized social music experience.
                             </p>
                             <AuthButton />
                             <p className="italic text-sm mt-2 text-gray-400">🎧 Closed Beta</p>
