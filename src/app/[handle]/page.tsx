@@ -11,6 +11,7 @@ import {SpotifyTrack} from "@/types/types";
 import FollowButton from "@/app/components/PublicProfile/FollowButton";
 import { useSession } from "next-auth/react";
 import Link from "next/link";
+import FollowersTab from "@/app/components/PublicProfile/FollowersTab";
 
 
 interface User {
@@ -151,6 +152,9 @@ export default function Profile() {
                                     />
                                 </div>
 
+
+
+
                                 {/* Content Split */}
                                 <div className="relative z-10 flex flex-col md:flex-row justify-between items-center gap-8">
                                     {/* Left: User Info */}
@@ -168,6 +172,23 @@ export default function Profile() {
 
                                         <h1 className="text-3xl font-bold">{user.name}</h1>
                                         <p className="text-gray-400 text-sm mb-1">{handle}</p>
+
+                                        {/*Follow Modal*/}
+                                        {/* Open the modal using document.getElementById('ID').showModal() method */}
+                                        {/*<button className="btn" onClick={()=>document.getElementById('my_modal_1').showModal()}>{followersCount} Followers</button>*/}
+                                        {/*<dialog id="my_modal_1" className="modal">*/}
+                                        {/*    <div className="modal-box">*/}
+                                        {/*        <h3 className="font-bold text-lg">{user.name}&#39;s Followers ({followersCount})</h3>*/}
+                                        {/*        <p className="py-4">Press ESC key or click the button below to close</p>*/}
+                                        {/*        <div className="modal-action">*/}
+                                        {/*            <form method="dialog">*/}
+                                        {/*                /!* if there is a button in form, it will close the modal *!/*/}
+                                        {/*                <button className="btn">Close</button>*/}
+                                        {/*            </form>*/}
+                                        {/*        </div>*/}
+                                        {/*    </div>*/}
+                                        {/*</dialog>*/}
+
                                         <Link href={`/followers?userId=${user.id}`} className="text-sm text-gray-400 mb-2">
                                             <p className="text-sm text-purple-500 mb-2">{followersCount || "0"} followers</p>
                                         </Link>
@@ -210,6 +231,9 @@ export default function Profile() {
                                     )}
                                 </div>
                             </div>
+
+                            <FollowersTab userId={user.id}></FollowersTab>
+
 
 
                             {/* Recently Played Section */}
