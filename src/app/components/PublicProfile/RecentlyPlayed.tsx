@@ -17,12 +17,12 @@ export default function RecentlyPlayed({ items }: { items: SpotifyTrack[] }) {
 
     return (
         <div
-            className={`rounded-xl p-4 shadow-lg bg-base-200 relative overflow-hidden ${
+            className={`rounded-xl text-c p-4 shadow-lg bg-base-200 relative overflow-hidden ${
                 allSameAlbum ? "album-streak-glow" : ""
             }`}
         >
             <div className="flex items-center gap-2 mb-4">
-                <h2 className="text-xl font-bold">Recently Played</h2>
+
                 {allSameAlbum && (
                     <div className="flex items-center gap-1 text-rose-500 animate-pulse">
                         <FaFire className="text-2xl" />

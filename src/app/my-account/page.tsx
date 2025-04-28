@@ -198,7 +198,7 @@ export default function MyAccount() {
 
             {/* Buttons */}
             <div className="flex flex-col gap-4 items-center mt-8">
-                <Link href="/u/[handle]" as={`/u/${userData.handle}`}>
+                <Link href="/[handle]" as={`/${userData.handle}`}>
                     <button className="btn btn-primary w-full max-w-md">View Public Profile</button>
                 </Link>
                 <button className="btn btn-success w-full max-w-md" onClick={handleSave}>
