@@ -232,7 +232,7 @@ export default function Profile() {
                                 </div>
                             </div>
 
-                            <FollowersTab userId={user.id}></FollowersTab>
+                            {/*<FollowersTab userId={user.id}></FollowersTab>*/}
 
 
 
