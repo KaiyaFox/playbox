@@ -11,7 +11,7 @@ import {SpotifyTrack} from "@/types/types";
 import FollowButton from "@/app/components/PublicProfile/FollowButton";
 import { useSession } from "next-auth/react";
 import Link from "next/link";
-import FollowersTab from "@/app/components/PublicProfile/FollowersTab";
+// import FollowersTab from "@/app/components/PublicProfile/FollowersTab";
 
 
 interface User {
