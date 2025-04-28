@@ -56,7 +56,7 @@ export default function AuthButton() {
                 <li>
                     <a onClick={() => handleNavigation("/my-account")}>
                         Account Settings
-                        <span className="badge bg-amber-900">New</span>
+                        <span className="badge bg-red-900">New</span>
                     </a>
                 </li>
                 <li>
