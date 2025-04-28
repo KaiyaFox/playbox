@@ -173,10 +173,25 @@ export default function Dashboard() {
                         </div>
 
                         {/*Floating Player*/}
+                        {trackData?.isPlaying ? (
+                            <div className="fixed bottom-4 right-4 bg-base-200 p-4 rounded-xl shadow-xl z-50">
+                                <h3 className="font-semibold text-lg">{trackData?.track}</h3>
+                                <p className="text-sm text-gray-400">{trackData?.artist}</p>
+                            </div>
+                        ) : (
+                            <div className="fixed bottom-4 right-4 bg-base-200 p-4 rounded-xl shadow-xl z-50">
+                                <h3 className="font-semibold text-lg">Spotify Paused</h3>
+                                <p className="text-sm text-gray-400"></p>
+                            </div>
+                        )}
                         <div className="fixed bottom-4 right-4 bg-base-200 p-4 rounded-xl shadow-xl z-50">
                             <h3 className="font-semibold text-lg">{trackData?.track}</h3>
                             <p className="text-sm text-gray-400">{trackData?.artist}</p>
                         </div>
+
+
+
+                        {/* Main Content */}
 
 
 

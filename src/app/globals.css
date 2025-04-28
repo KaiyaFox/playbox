@@ -36,3 +36,9 @@ body {
   border: 2px solid rgba(244, 63, 94, 0.5); /* Optional: faint border */
   background-color: rgba(244, 63, 94, 0.05); /* Optional: very soft background */
 }
+
+.top-artist-glow {
+    animation: glowPulse 5s ease-in-out infinite;
+    border: 2px solid rgb(65, 35, 104); /* Optional: faint border */
+    background-color: rgba(65, 35, 104, 0.19); /* Optional: very soft background */
+}

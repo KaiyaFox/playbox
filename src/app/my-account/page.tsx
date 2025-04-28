@@ -119,8 +119,13 @@ export default function MyAccount() {
         <div className="container mx-auto p-4 max-w-3xl">
             {/* Profile Header */}
             <div className="text-center mb-10">
-                <h1 className="text-4xl font-bold">Welcome back, {session.user.name} 👋</h1>
+                <h1 className="text-4xl font-bold">Welcome back, </h1>
+                <h1 className="text-4xl font-bold text-purple-600">{session?.user?.name}</h1>
                 <p className="text-lg text-gray-500">Manage your public profile and preferences</p>
+
+                <Link href="/[handle]" as={`/${userData.handle}`}>
+                    <button className=" mt-6 btn btn-primary w-full max-w-md">View Your Public Profile</button>
+                </Link>
             </div>
 
             {/* Handle Section */}
@@ -196,17 +201,20 @@ export default function MyAccount() {
                 </div>
             </div>
 
+            {/*Delete Account*/}
+            <div className="card bg-base-200 shadow-xl p-6 mb-6 flex justify-center items-center">
+                <h2 className="text-xl font-semibold mb-2">Delete Account</h2>
+                <p className="mb-2 text-sm text-gray-500 center">This action is irreversible. All your data will be deleted.</p>
+                <Link href="/delete">
+                    <button className="btn btn-error w-full max-w-md ">Delete My Account</button>
+                </Link>
+            </div>
+
             {/* Buttons */}
             <div className="flex flex-col gap-4 items-center mt-8">
-                <Link href="/[handle]" as={`/${userData.handle}`}>
-                    <button className="btn btn-primary w-full max-w-md">View Public Profile</button>
-                </Link>
                 <button className="btn btn-success w-full max-w-md" onClick={handleSave}>
                     Save Changes
                 </button>
-                <Link href="/delete">
-                    <button className="btn btn-error w-full max-w-md">Delete My Account</button>
-                </Link>
             </div>
         </div>
     ) : (
