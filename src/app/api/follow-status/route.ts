@@ -48,13 +48,20 @@ export async function GET(request: NextRequest) {
     try {
         const { data, error } = await supabase
             .from("follows")
-            .select("*")
+            .select("follower_id, follower:users(id, name, avatar_url)")
             .eq("following_id", userId);
 
         if (error) {
             console.error("Error fetching followers:", error);
             return NextResponse.json({ error: "Failed to fetch followers" }, { status: 500 });
         }
+
+        //const followerIds = data?.map((follower) => follower.follower_id || "") || [];
+
+        return NextResponse.json(
+            { followers: data || [] },
+            { status: 200 }
+        );
 
         return NextResponse.json({ followersCount: data?.length || 0 }, { status: 200 });
     } catch (error) {

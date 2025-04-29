@@ -4,6 +4,7 @@ import { signIn, signOut, useSession } from "next-auth/react";
 import Image from "next/image";
 import { useRouter } from "next/navigation";
 import React from "react";
+import {LogOut} from "lucide-react";
 
 export default function AuthButton() {
     const { data: session } = useSession();
@@ -60,7 +61,14 @@ export default function AuthButton() {
                     </a>
                 </li>
                 <li>
+                    <a onClick={() => handleNavigation("/about")}>
+                        About
+                    </a>
+                </li>
+                <li></li>
+                <li>
                     <a onClick={() => signOut()}>Logout</a>
+                    <LogOut className="mr-2" size={16} />
                 </li>
             </ul>
         </div>

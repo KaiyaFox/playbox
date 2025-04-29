@@ -38,7 +38,7 @@ export default function MyAccount() {
 
     const validationInput = (value: string) => {
         if (value === "") return true
-        const regex = /^[a-zA-Z0-9_]+$/; // Regex to allow only alphanumeric characters and underscores
+        const regex = /^[a-z0-9_]+$/; // Regex to allow only alphanumeric characters and underscores
         return regex.test(value)
     }
 
@@ -131,9 +131,9 @@ export default function MyAccount() {
             {/* Handle Section */}
             <div className="card bg-base-200 shadow-xl p-6 mb-6">
                 <h2 className="text-xl font-semibold mb-2">Custom Profile Handle</h2>
-                <p className="mb-2 text-sm text-gray-500">This is your public username for your PlayBox profile.</p>
+                <p className="mb-2 text-sm text-gray-500">This is your unique public handle to identify your PlayBox profile and It will be used is the url. </p>
                 <label className="input input-bordered flex items-center gap-2 w-full max-w-md">
-                    <span className="text-gray-400">playbox.music/u/</span>
+                    <span className="text-gray-400">playbox.music/</span>
                     <input
                         type="text"
                         className="grow"
@@ -146,9 +146,24 @@ export default function MyAccount() {
                 {userData.handle && (
                     <div className="mt-6">
                         <p className="font-medium text-sm mb-2">Your QR Code</p>
+                        <p className="text-sm text-gray-500 mb-2">You share this QR code with others so they can see your public profile.</p>
                         <ProfileQR userHandle={userData.handle} />
                     </div>
                 )}
+            </div>
+
+            {/*Display Name*/}
+            <div className="card bg-base-200 shadow-xl p-6 mb-6">
+                <h2 className="text-xl font-semibold mb-2">Display Name</h2>
+                <p className="mb-2 text-sm text-gray-500">Your display name is how others see you on PlayBox. By default we will use your Spotify name but you can customize it to whatever you want.</p>
+                <input
+                    className="input w-full max-w-md"
+                    placeholder=""
+                    value={userData.name}
+                    onChange={(e) =>
+                        setUserData((prevData) => ({ ...prevData, name: e.target.value }))
+                    }
+                />
             </div>
 
             {/*Bio*/}
@@ -169,7 +184,7 @@ export default function MyAccount() {
             {/* Playlist Selector */}
             <div className="card bg-base-200 shadow-xl p-6 mb-6">
                 <h2 className="text-xl font-semibold mb-2">Showcased Playlist</h2>
-                <p className="mb-2 text-sm text-gray-500">Select a playlist to feature on your public profile.</p>
+                <p className="mb-2 text-sm text-gray-500">Select one of your playlist you created on Spotify to feature on your public profile.</p>
                 <select
                     className="select select-bordered w-full max-w-xs"
                     value={userData.selectedPlaylist}
@@ -190,6 +205,7 @@ export default function MyAccount() {
             {/* Profile Visibility */}
             <div className="card bg-base-200 shadow-xl p-6 mb-6">
                 <h2 className="text-xl font-semibold mb-2">Profile Visibility</h2>
+                <p className="mb-2 text-sm text-gray-500">Control whether your profile can be seen by all the internet</p>
                 <div className="flex items-center gap-3">
                     <span className="text-sm">Enable public profile</span>
                     <input

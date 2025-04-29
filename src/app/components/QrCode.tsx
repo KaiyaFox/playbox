@@ -32,7 +32,6 @@ export default function ProfileQR({ userHandle }: ProfileQRProps) {
 
     return (
         <div>
-            <h1>QR Code for {userHandle}</h1>
             {qrCode ?
                 <Image src={qrCode} alt={"qr-code"} width={200} height={200} /> : <p>Generating QR Code...</p>}
         </div>

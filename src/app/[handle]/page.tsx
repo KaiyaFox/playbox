@@ -11,7 +11,7 @@ import {SpotifyTrack} from "@/types/types";
 import FollowButton from "@/app/components/PublicProfile/FollowButton";
 import { useSession } from "next-auth/react";
 import Link from "next/link";
-// import FollowersTab from "@/app/components/PublicProfile/FollowersTab";
+import FollowersTab from "@/app/components/PublicProfile/FollowersTab";
 
 
 interface User {
@@ -174,7 +174,7 @@ export default function Profile() {
                                         <p className="text-gray-400 text-sm mb-1">{handle}</p>
 
                                         {/*Follow Modal*/}
-                                        {/* Open the modal using document.getElementById('ID').showModal() method */}
+                                        {/* Open the modal using document.getElementById('ID').showModal() method*/}
                                         {/*<button className="btn" onClick={()=>document.getElementById('my_modal_1').showModal()}>{followersCount} Followers</button>*/}
                                         {/*<dialog id="my_modal_1" className="modal">*/}
                                         {/*    <div className="modal-box">*/}
@@ -232,7 +232,7 @@ export default function Profile() {
                                 </div>
                             </div>
 
-                            {/*<FollowersTab userId={user.id}></FollowersTab>*/}
+                            <FollowersTab userId={user.id}></FollowersTab>
 
 
 
@@ -256,7 +256,7 @@ export default function Profile() {
                 ) : (
                     <div className="flex flex-col items-center justify-center h-screen">
                         <div className="animate-spin rounded-full h-12 w-12 border-t-2 border-b-2 border-blue-500"></div>
-                        <p className="mt-4 text-gray-400">🎧 PlayBox 🎸</p>
+                        <p className="mt-4 text-gray-400 text-3xl">🎧 PlayBox 🎸</p>
                     </div>
                 )}
             </div>

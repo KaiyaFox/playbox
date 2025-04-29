@@ -26,7 +26,7 @@ export default function RecentlyPlayed({ items }: { items: SpotifyTrack[] }) {
                 {allSameAlbum && (
                     <div className="flex items-center gap-1 text-rose-500 animate-pulse">
                         <FaFire className="text-2xl" />
-                        <span className="text-sm font-semibold">Same Album Streak!</span>
+                        <span className="text-sm font-semibold">Listening Streak!</span>
                     </div>
                 )}
             </div>
