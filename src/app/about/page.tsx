@@ -26,6 +26,14 @@ export default function AboutPage() {
                         <br />
                         This means you can stay logged into PlayBox on any device without interrupting your music.
                     </p>
+                    <h2 className="text-2xl font-bold text-center text-primary">Social Profile</h2>
+
+                    <p className="text-gray-400 text-center">
+                        As a logged in user you can make your account public or private, and you can follow other users to see their listening habits.
+                        <br />
+                        You can also see your friends&#39; listening habits.
+                        <br />
+                    </p>
                     <p className="text-gray-400 text-center">
                         Get insights like your artist affinity, recent plays, and song popularity. Plus, you can leave comments on tracks you&#39;re listening to and see comments from other PlayBox users — linked directly to their Spotify usernames.
                     </p>

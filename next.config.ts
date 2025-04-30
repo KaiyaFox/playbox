@@ -12,7 +12,7 @@ const nextConfig: NextConfig = {
             },
             {
                 protocol: 'https',
-                hostname: 'dummyimage.com',
+                hostname: 'scontent-lhr6-2.xx.fbcdn.net',
                 pathname: '**',
             }
         ],

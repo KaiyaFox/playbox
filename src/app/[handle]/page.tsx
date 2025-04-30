@@ -174,24 +174,30 @@ export default function Profile() {
                                         <p className="text-gray-400 text-sm mb-1">{handle}</p>
 
                                         {/*Follow Modal*/}
-                                        {/* Open the modal using document.getElementById('ID').showModal() method*/}
-                                        {/*<button className="btn" onClick={()=>document.getElementById('my_modal_1').showModal()}>{followersCount} Followers</button>*/}
-                                        {/*<dialog id="my_modal_1" className="modal">*/}
-                                        {/*    <div className="modal-box">*/}
-                                        {/*        <h3 className="font-bold text-lg">{user.name}&#39;s Followers ({followersCount})</h3>*/}
-                                        {/*        <p className="py-4">Press ESC key or click the button below to close</p>*/}
-                                        {/*        <div className="modal-action">*/}
-                                        {/*            <form method="dialog">*/}
-                                        {/*                /!* if there is a button in form, it will close the modal *!/*/}
-                                        {/*                <button className="btn">Close</button>*/}
-                                        {/*            </form>*/}
-                                        {/*        </div>*/}
-                                        {/*    </div>*/}
-                                        {/*</dialog>*/}
+                                        {/* Open Modal Button */}
+                                        <button
+                                            className="btn"
+                                            onClick={() => (document.getElementById("followers_modal") as HTMLDialogElement).showModal()}
+                                        >
+                                            {followersCount} Followers
+                                        </button>
 
-                                        <Link href={`/followers?userId=${user.id}`} className="text-sm text-gray-400 mb-2">
-                                            <p className="text-sm text-purple-500 mb-2">{followersCount || "0"} followers</p>
-                                        </Link>
+                                        {/* Modal */}
+                                        <dialog id="followers_modal" className="modal">
+                                            <div className="modal-box w-full max-w-3xl">
+                                                <FollowersTab userId={user.id} userName={user.name} />
+
+                                                <div className="modal-action">
+                                                    <form method="dialog">
+                                                        <button className="btn">Close</button>
+                                                    </form>
+                                                </div>
+                                            </div>
+                                        </dialog>
+
+                                        {/*<Link href={`/followers?userId=${user.id}`} className="text-sm text-gray-400 mb-2">*/}
+                                        {/*    <p className="text-sm text-purple-500 mb-2">{followersCount || "0"} followers</p>*/}
+                                        {/*</Link>*/}
 
 
 
@@ -231,8 +237,6 @@ export default function Profile() {
                                     )}
                                 </div>
                             </div>
-
-                            <FollowersTab userId={user.id}></FollowersTab>
 
 
 

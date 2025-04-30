@@ -1,28 +1,19 @@
-// // Tab that shows the users followers
 import { useEffect, useState } from "react";
+import Image from "next/image";
+import { useRouter } from "next/navigation";
+import { FollowerEntry } from "@/types/types";
 
 
-type Follower = {
-    id: string;
-    created_at: string;
-    follower: {
-        id: string;
-        name: string;
-    };
-};
+export default function FollowersTab({ userId }: { userId: string; userName: string }) {
+    const router = useRouter();
+    const [followers, setFollowers] = useState<FollowerEntry[]>([]); // update type as needed
 
-
-export default function FollowersTab({ userId }: { userId: string }) {
-    const [followers, setFollowers] = useState<Follower[]>([]);
 
     useEffect(() => {
         const fetchFollowers = async () => {
             try {
-                const response = await fetch(`/api/follow-status?userId=${userId}`, {
-                    method: "GET",
-                });
+                const response = await fetch(`/api/follow-status?userId=${userId}`);
                 const data = await response.json();
-                console.log("Followers data: ", data);
                 setFollowers(data.followers || []);
             } catch (error) {
                 console.error("Error fetching followers:", error);
@@ -33,23 +24,41 @@ export default function FollowersTab({ userId }: { userId: string }) {
     }, [userId]);
 
     return (
-        <div className="overflow-x-auto">
-            <table className="table w-full">
-                <thead>
-                <tr>
-                    <th>Follower</th>
-                    <th>Followed At</th>
-                </tr>
-                </thead>
-                <tbody>
-                {followers.map((followerEntry) => (
-                    <tr key={followerEntry.id}>
-                        <td>{followerEntry.follower?.name || "Unknown"}</td>
-                        <td>{new Date(followerEntry.created_at).toLocaleDateString()}</td>
-                    </tr>
-                ))}
-                </tbody>
-            </table>
+        <>
+            <p className="flex items-center justify-between p-6">Followers</p>
+        <div className="grid gap-4 grid-cols-1 sm:grid-cols-2">
+            {followers.map((followerEntry) => {
+                const follower = followerEntry.follower;
+                return (
+                    <div
+                        key={followerEntry.id}
+                        className="cursor-pointer flex items-center gap-4 p-4 rounded-xl  hover:shadow-md transition-all duration-200"
+                        onClick={() => {
+                            // Navigate to the follower's profile or perform an action
+                            router.push(`/${follower.handle}`);
+
+                            // Optional: navigate or open a modal/profile, e.g.
+                            console.log("Clicked:", follower.handle);
+                        }}
+                    >
+                        <Image
+                            src={follower.image}
+                            alt={follower.name}
+                            width={48}
+                            height={48}
+                            className="rounded-full"
+                        />
+                        <div>
+                            <p className="font-semibold">{follower.name}</p>
+                            <p className="text-sm text-gray-500">
+                                Followed on {new Date(followerEntry.created_at || "").toLocaleDateString()}
+                            </p>
+                        </div>
+                    </div>
+                );
+            })}
         </div>
+        </>
+
     );
 }

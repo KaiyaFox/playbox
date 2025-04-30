@@ -48,7 +48,11 @@ export async function GET(request: NextRequest) {
     try {
         const { data, error } = await supabase
             .from("follows")
-            .select("follower_id, follower:users(id, name, avatar_url)")
+            .select(`
+    id,
+    created_at,
+    follower:users!follows_follower_id_fkey ( id, name, image, handle )
+  `)
             .eq("following_id", userId);
 
         if (error) {

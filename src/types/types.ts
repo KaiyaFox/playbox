@@ -55,3 +55,13 @@ export interface PlayBoxUser {
 //     display_name: string;
 //     images: { url: string }[];
 // }
+
+export interface FollowerEntry {
+    id: string;
+    created_at: string;
+    follower: {
+        handle: string;
+        name: string;
+        image: string;
+    };
+}
