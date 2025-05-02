@@ -12,7 +12,7 @@ import FollowButton from "@/app/components/PublicProfile/FollowButton";
 import { useSession } from "next-auth/react";
 import Link from "next/link";
 import FollowersTab from "@/app/components/PublicProfile/FollowersTab";
-
+import Avatar from "@/app/components/PublicProfile/Avatar";
 
 interface User {
     id: string;
@@ -61,6 +61,7 @@ export default function Profile() {
     useEffect(() => {
         if (!handle) return; // Prevent execution if handle is undefined
 
+        // Todo: May need to moe this fetch to a API route
         // Fetch the users public profile data
         const fetchUser = async () => {
             try {
@@ -92,6 +93,12 @@ export default function Profile() {
                     setBio(data.bio); // Save bio
                     setPlaylistId(data.playlist); // Save playlist
                     setRecentlyPlayed(data.recently_played); // Save recently played
+                    // If the image is not set, use the default image
+                    if (!data?.image || data.image === "") {
+                        setImage("https://www.thesprucepets.com/thmb/5J8K8uYeFbyFR8s9DNwzuHebWJs=/5025x3350/filters:fill(auto,1)/resting-fox-518723164-eb58c43523a94f0982243df7e2a91b65.jpg");
+                    } else {
+                        setImage(data.image);
+                    }
                 }
             } catch (err) {
                 console.error("Error fetching user:", err);
@@ -101,6 +108,7 @@ export default function Profile() {
         fetchUser();
 
     }, [handle]);
+
 
 
     // Get users following count
@@ -130,7 +138,7 @@ export default function Profile() {
             <div className="container mx-auto p-4">
                 {noData ? (
                     <div className="flex flex-col items-center justify-center h-screen">
-                        <p className="text-4xl ">🙀 User {handle} not found</p>
+                        <p className="text-4xl ">🙀 404 page not found</p>
                         <button
                             className="text-2xl text-gray-400 hover:underline focus:outline-none"
                             onClick={() => window.history.back()}
@@ -160,15 +168,18 @@ export default function Profile() {
                                     {/* Left: User Info */}
                                     <div className="flex flex-col items-center md:items-start text-center md:text-left">
                                         {/* Avatar */}
-                                        <div className="relative w-32 h-32 mb-4">
-                                            <Image
-                                                src={image}
-                                                alt="User Avatar"
-                                                width={128}
-                                                height={128}
-                                                className="rounded-full border-2 border-white shadow-md"
-                                            />
-                                        </div>
+
+                                        <Avatar name={user.name} imageUrl={user.image} />
+
+                                        {/*<div className="relative w-32 h-32 mb-4">*/}
+                                        {/*    <Image*/}
+                                        {/*        src={image}*/}
+                                        {/*        alt="User Avatar"*/}
+                                        {/*        width={128}*/}
+                                        {/*        height={128}*/}
+                                        {/*        className="rounded-full border-2 border-white shadow-md"*/}
+                                        {/*    />*/}
+                                        {/*</div>*/}
 
                                         <h1 className="text-3xl font-bold">{user.name}</h1>
                                         <p className="text-gray-400 text-sm mb-1">{handle}</p>
@@ -184,7 +195,7 @@ export default function Profile() {
 
                                         {/* Modal */}
                                         <dialog id="followers_modal" className="modal">
-                                            <div className="modal-box w-full max-w-3xl">
+                                            <div className="modal-box w-full max-w-3xl bg-accent text-white">
                                                 <FollowersTab userId={user.id} userName={user.name} />
 
                                                 <div className="modal-action">
@@ -219,7 +230,7 @@ export default function Profile() {
                                         <div className="px-6 py-5 text-center w-full md:w-72">
                                             <p className="text-sm text-gray-400 mb-2">My #1:</p>
                                             <Link href={usersTopArtist.external_urls?.spotify || "#"} target="_blank" rel="noopener noreferrer">
-                                                <div className="w-64 h-64 mx-auto rounded-md overflow-hidden shadow-lg mb-2 top-artist-glow">
+                                                <div className="w-auto h-auto mx-auto rounded-md overflow-hidden shadow-lg mb-2 top-artist-glow">
                                                     <Image
                                                         src={usersTopArtist.images[0].url}
                                                         alt={usersTopArtist.name}

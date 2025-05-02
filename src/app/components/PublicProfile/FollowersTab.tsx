@@ -1,8 +1,7 @@
 import { useEffect, useState } from "react";
-import Image from "next/image";
 import { useRouter } from "next/navigation";
 import { FollowerEntry } from "@/types/types";
-
+import Avatar from "@/app/components/PublicProfile/Avatar";
 
 export default function FollowersTab({ userId }: { userId: string; userName: string }) {
     const router = useRouter();
@@ -32,22 +31,13 @@ export default function FollowersTab({ userId }: { userId: string; userName: str
                 return (
                     <div
                         key={followerEntry.id}
-                        className="cursor-pointer flex items-center gap-4 p-4 rounded-xl  hover:shadow-md transition-all duration-200"
+                        className="cursor-pointer flex items-center gap-4 p-4 rounded-xl  hover:shadow-2xl transition-all duration-200 text-purple-600"
                         onClick={() => {
                             // Navigate to the follower's profile or perform an action
                             router.push(`/${follower.handle}`);
-
-                            // Optional: navigate or open a modal/profile, e.g.
-                            console.log("Clicked:", follower.handle);
                         }}
                     >
-                        <Image
-                            src={follower.image}
-                            alt={follower.name}
-                            width={48}
-                            height={48}
-                            className="rounded-full"
-                        />
+                        <Avatar name={follower.name} imageUrl={follower.image} size={32} />
                         <div>
                             <p className="font-semibold">{follower.name}</p>
                             <p className="text-sm text-gray-500">

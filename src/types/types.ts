@@ -65,3 +65,11 @@ export interface FollowerEntry {
         image: string;
     };
 }
+
+export interface HandPickedTrack {
+    id: string;
+    name: string;
+    artists: { name: string }[]; // can have multiple artists
+    image: string;
+    url: string;
+};

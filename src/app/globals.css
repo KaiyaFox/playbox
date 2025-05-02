@@ -9,8 +9,8 @@
 
 @media (prefers-color-scheme: dark) {
   :root {
-    --background: #0a0a0a;
-    --foreground: #ededed;
+    --background: #1a0b2a;
+    --foreground: #ddbfff;
   }
 }
 
@@ -41,4 +41,8 @@ body {
     animation: glowPulse 5s ease-in-out infinite;
     border: 2px solid rgb(65, 35, 104); /* Optional: faint border */
     background-color: rgba(65, 35, 104, 0.19); /* Optional: very soft background */
+}
+
+.bg-accent {
+  background-color: #1c0f28;
 }
